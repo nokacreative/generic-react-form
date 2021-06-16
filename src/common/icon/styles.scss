@@ -1,0 +1,29 @@
+.icon {
+  display: inline-block;
+  color: var(--header);
+
+  & > .label {
+    margin-left: 0.5em;
+    white-space: nowrap;
+  }
+
+  &.label-on-hover {
+    max-width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.5s ease-in-out;
+
+    &:hover {
+      max-width: 100%;
+    }
+  }
+}
+
+.icon.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--active);
+  }
+}

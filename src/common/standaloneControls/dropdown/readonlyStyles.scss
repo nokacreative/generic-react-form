@@ -1,0 +1,9 @@
+.readonly-option {
+  display: inline-block;
+
+  &:not(:last-child)::after {
+    content: ',';
+    display: inline-block;
+    margin-right: 0.1em;
+  }
+}

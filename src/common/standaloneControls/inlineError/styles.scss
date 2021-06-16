@@ -1,0 +1,15 @@
+.error-message {
+  font-size: 0.9em;
+  color: var(--error);
+  margin-top: 15px;
+  position: relative;
+
+  .icon {
+    color: white;
+    background: var(--error);
+    width: 1.7em;
+    height: 1.7em;
+    text-align: center;
+    margin-right: 0.5em;
+  }
+}

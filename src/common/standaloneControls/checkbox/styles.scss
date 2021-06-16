@@ -1,0 +1,89 @@
+label.radioOrCheckbox {
+  display: flex !important;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-right: 30px;
+  }
+
+  input {
+    display: none;
+    position: relative;
+
+    &:checked {
+      & + .radio-control::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--label);
+        position: absolute;
+        top: 9px;
+        left: 9px;
+        color-adjust: exact;
+      }
+      & + .checkbox-control .icon {
+        display: block;
+      }
+    }
+
+    .label {
+      flex: 1;
+    }
+  }
+
+  &.disabled {
+    .radio-control,
+    .checkbox-control {
+      background: var(--disabledControlBg);
+      &::after {
+        background: var(--disabledControlText) !important;
+      }
+    }
+
+    .checkbox-control .icon path {
+      stroke: var(--disabledControlText);
+    }
+  }
+
+  .radio-control,
+  .checkbox-control {
+    width: 32px;
+    height: 32px;
+    border: var(--controlBorder);
+    border-radius: var(--controlBorderRadius);
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    background: var(--controlBg);
+    flex-shrink: 0;
+  }
+
+  .checkbox-control {
+    margin-right: 16px;
+
+    .icon {
+      display: none;
+      margin-top: -2px;
+      margin-left: 7px;
+
+      path {
+        stroke: var(--controlText);
+      }
+    }
+  }
+
+  .radio-control {
+    border-radius: 50%;
+    margin-right: 13px;
+  }
+
+  &.readonly {
+    margin-right: 1.2em;
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+}

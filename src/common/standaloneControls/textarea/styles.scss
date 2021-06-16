@@ -1,0 +1,48 @@
+.textarea-wrapper {
+  position: relative;
+
+  textarea {
+    min-height: 118px;
+    resize: none;
+
+    &.long {
+      min-height: 165px;
+    }
+
+    &.resizable {
+      resize: both;
+    }
+    &.resizable-h {
+      resize: horizontal;
+    }
+    &.resizable-v {
+      resize: vertical;
+    }
+  }
+
+  .characterLimit-label {
+    font-size: 14px;
+    line-height: 24px;
+    text-align: right;
+    color: #4a4a4a;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@media print {
+  .textarea-wrapper {
+    textarea {
+      height: 118px !important;
+
+      &.long {
+        height: auto !important;
+      }
+    }
+
+    .characterLimit-label {
+      display: none;
+    }
+  }
+}

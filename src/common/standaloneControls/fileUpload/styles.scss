@@ -1,0 +1,152 @@
+@import '../../../assets/mixins.scss';
+
+.file-upload-control {
+  display: flex;
+  flex-direction: column;
+
+  .dropZone {
+    min-height: 300px;
+    background: var(--controlBg);
+    border: var(--controlBorder);
+    border-radius: var(--controlBorderRadius);
+    border-style: dashed;
+    flex: 1;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: margin 0.3s;
+    margin: 0em;
+
+    &.draggedOver {
+      border: var(--activeBorder);
+      margin: 1em;
+
+      .upload-icon svg {
+        transform: scale(1.2);
+      }
+    }
+
+    &.disabled {
+      background: var(--disabledControlBg);
+      color: var(--disabledControlText);
+
+      .instructions {
+        color: inherit;
+      }
+    }
+
+    &.error {
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    .instructions {
+      color: var(--controlText);
+      font-size: var(--controlTextSize);
+
+      p {
+        margin: 0.8em 0;
+      }
+
+      a {
+        display: inline-block;
+      }
+
+      .further-descriptions {
+        @include description;
+        line-height: 1.5em;
+      }
+    }
+
+    .upload-icon svg {
+      transition: all 0.3s ease-in-out;
+    }
+  }
+
+  .file {
+    display: flex;
+    flex-direction: column;
+    border: var(--controlBorder);
+    margin-top: 1em;
+    padding: 0.8em 1em;
+
+    .file-info {
+      display: flex;
+      align-items: center;
+
+      .file-icon {
+        margin-right: 1em;
+      }
+
+      .file-size {
+        display: block;
+        margin-top: -5px;
+        @include description;
+      }
+
+      & > .main {
+        flex: 1;
+      }
+
+      .icon.retry {
+        margin-right: 10px;
+      }
+    }
+
+    &.error {
+      border-color: var(--error);
+
+      .progress-bar {
+        background: var(--error);
+      }
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
+    .progress-bar {
+      height: 5px;
+      background: var(--header);
+      margin-top: 0.5em;
+      transition: all 0.3s ease-in-out;
+
+      .progress-bar-fill {
+        height: 100%;
+        background: var(--active);
+        transition: width 0.3s ease-in-out;
+        width: 0%;
+      }
+
+      &.complete {
+        height: 0;
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media print {
+    .dropZone {
+      display: none;
+    }
+
+    .file-list:empty::before {
+      content: attr(data-emptyprintmessage);
+    }
+
+    .file:first-child {
+      margin-top: 0;
+    }
+
+    .icon.remove,
+    .icon.retry {
+      display: none;
+    }
+  }
+
+  &.readonly {
+    width: 100%;
+  }
+}

@@ -1,0 +1,56 @@
+.noka-form-colors {
+  --label: #505050;
+  --header: #777777;
+  --active: #ff9933;
+  --error: #b91a0e;
+  --placeholder: #adadad;
+
+  --controlBg: white;
+  --controlText: var(--label);
+  --controlBorder: 1px solid #b39f98;
+  --controlHeight: 42px;
+  --controlTextSize: 0.8em;
+  --controlBorderRadius: 2px;
+
+  --disabledControlBg: #eaeaea;
+  --disabledControlText: #8c8c8c;
+
+  --descriptionText: #8c8c8c;
+  --descriptionTextSize: 0.8em;
+
+  --activeBorder: 1px solid var(--active);
+}
+
+input.noka-form-colors,
+textarea.noka-form-colors,
+.noka-form-colors input,
+.noka-form-colors textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--controlTextSize);
+  border: var(--controlBorder);
+  background: var(--controlBg);
+  color: var(--controlText);
+  border-radius: var(--controlBorderRadius);
+  height: var(--controlHeight);
+  padding: 7px 12px;
+
+  &:active,
+  &:focus {
+    outline: 1px solid var(--active);
+    border-color: var(--active);
+  }
+
+  &:disabled {
+    background: var(--disabledControlBg);
+    color: var(--disabledControlText);
+  }
+
+  &[type='file'] {
+    display: none;
+  }
+}
+
+.noka-form-colors ::placeholder {
+  color: var(--placeholder);
+}

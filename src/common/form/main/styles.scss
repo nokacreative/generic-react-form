@@ -1,0 +1,203 @@
+@import '../../../assets/mixins.scss';
+
+form {
+  .control-row {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: 1em;
+    }
+
+    &.small {
+      width: 35%;
+    }
+    &.medium {
+      width: 50%;
+    }
+    &.medLarge {
+      width: 75%;
+    }
+    &.large {
+      width: 85%;
+    }
+
+    @media all and (max-width: 1200px) {
+      &.small {
+        width: 50%;
+      }
+      &.large,
+      &.medLarge {
+        width: 100%;
+      }
+    }
+
+    @media all and (max-width: 770px) {
+      &.withThreeOrMoreChildren {
+        flex-direction: column;
+
+        .control {
+          margin-bottom: 15px;
+          width: 100%;
+        }
+      }
+      &.small,
+      &.medium {
+        width: 75%;
+      }
+    }
+
+    @media all and (max-width: 700px) {
+      flex-direction: column;
+      width: 100% !important;
+    }
+  }
+
+  .control {
+    flex: 1;
+
+    &:not(:last-child) {
+      margin-right: 32px;
+    }
+
+    &.right-aligned {
+      display: flex;
+      flex-direction: column;
+
+      & > * {
+        margin-left: auto;
+        justify-content: flex-end;
+      }
+    }
+
+    @media all and (max-width: 700px) {
+      margin-bottom: 15px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+    }
+
+    .control-description {
+      @include description;
+      margin-bottom: 1em;
+    }
+
+    label + .control-description {
+      margin-top: -0.5em;
+    }
+
+    &.error {
+      input,
+      .radio-control,
+      textarea {
+        border-color: var(--error);
+      }
+    }
+  }
+
+  .icon.info {
+    margin-left: 0.3em;
+  }
+}
+
+.checkbox-or-radio-group {
+  display: flex;
+
+  label {
+    font-weight: 400;
+  }
+
+  &.horizontal {
+    flex-wrap: wrap;
+  }
+
+  &.vertical {
+    flex-direction: column;
+
+    & > .radioOrCheckbox {
+      margin-bottom: 1em;
+    }
+  }
+
+  &.grid {
+    flex-wrap: wrap;
+    $columnCollapseWidth: 1240px;
+
+    & > .radioOrCheckbox {
+      margin-bottom: 1em;
+
+      @media all and (max-width: $columnCollapseWidth) {
+        flex-basis: 43% !important;
+        &:nth-child(even) {
+          margin-right: 0;
+        }
+      }
+      @media all and (max-width: 600px) {
+        flex-basis: 40% !important;
+      }
+      @media all and (max-width: 400px) {
+        flex-basis: auto !important;
+        margin-right: 0;
+      }
+    }
+
+    @media all and (max-width: 400px) {
+      flex-direction: column;
+    }
+
+    &.columns-2 > .radioOrCheckbox {
+      flex-basis: 43%;
+
+      @media all and (min-width: $columnCollapseWidth) {
+        &:nth-child(even) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &.columns-3 > .radioOrCheckbox {
+      flex-basis: 30%;
+
+      @media all and (min-width: $columnCollapseWidth) {
+        &:nth-child(3) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &.columns-4 > .radioOrCheckbox {
+      flex-basis: 20%;
+
+      @media all and (min-width: $columnCollapseWidth) {
+        &:nth-child(4) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+label {
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 2em;
+}
+
+@media print {
+  .control-row {
+    flex-direction: row !important;
+  }
+
+  .control {
+    break-inside: avoid-page;
+    margin-bottom: unset !important;
+    width: auto !important;
+  }
+
+  .icon.info {
+    display: none;
+  }
+}

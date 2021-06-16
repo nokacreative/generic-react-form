@@ -1,0 +1,24 @@
+.page-error {
+  font-size: 1em;
+  border: var(--controlBorder);
+  border-color: var(--error);
+  margin-top: 2em;
+  display: flex;
+  align-items: center;
+
+  span {
+    padding: 1em;
+  }
+
+  .icon {
+    padding: 1em 1.8em;
+    padding-bottom: 0.8em;
+    height: 100%;
+
+    svg {
+      width: 1.5em;
+      height: 1.5em;
+      margin-left: -0.65em;
+    }
+  }
+}

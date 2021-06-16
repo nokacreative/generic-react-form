@@ -1,0 +1,83 @@
+@import '../../../assets/mixins.scss';
+
+.dropdown-wrapper {
+  position: relative;
+
+  .dropdown-input {
+    padding-right: 25px;
+
+    &.withClearButton {
+      padding-right: 42px;
+    }
+  }
+
+  &.active {
+    .dropdown-input {
+      border-color: var(--active);
+    }
+
+    & > .dropdown-arrow {
+      transform: none;
+      top: calc(50% - 6px);
+    }
+  }
+
+  & > .dropdown-clear {
+    position: absolute;
+    color: var(--controlText);
+    right: 23px;
+    font-weight: 500;
+    font-size: 1.7em;
+    cursor: default;
+    top: 5px;
+  }
+
+  & > .dropdown-arrow {
+    @include triangle(var(--controlText), 12px);
+    transform: rotate(180deg);
+    position: absolute;
+    top: calc(50% - 5px);
+    right: 8px;
+    pointer-events: none;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+
+  .options-container {
+    border: 1px solid var(--active);
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--controlBg);
+    margin-top: -1px;
+    z-index: 1;
+    max-height: 300px;
+
+    .pinned-value-separator {
+      border-bottom: var(--controlBorder);
+    }
+  }
+
+  .dropdown-option {
+    padding: 0.1em 0.5em;
+    font-weight: 400;
+    color: var(--controlText);
+
+    &:hover,
+    &.selected,
+    &.hovered {
+      background: var(--active);
+    }
+  }
+
+  &.unfilterable .dropdown-input {
+    cursor: default;
+  }
+
+  &.disabled .dropdown-clear {
+    color: var(--disabledControlText);
+  }
+}
