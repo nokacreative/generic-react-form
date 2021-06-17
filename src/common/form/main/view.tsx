@@ -334,7 +334,9 @@ export function Form<T extends object>(props: Props<T>) {
             isAwaitingSubmit.current = true
             setTriggerFullValidation(true)
           } else if (Object.keys(state.errors).length > 0) {
-            setShowPageError(true)
+            if (props.pageErrorDisplayMode !== PageErrorDisplayMode.HIDE) {
+              setShowPageError(true)
+            }
           } else if (props.onSubmit) {
             props.onSubmit(state.data)
           }

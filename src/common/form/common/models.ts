@@ -15,7 +15,7 @@ export type ConditionalBooleanFunction<T> = ConditionalFunction<T, boolean>
 
 interface BaseControlConfig<T> {
   propertyPath: keyof T | string
-  label: string | undefined
+  label?: string
   /** A message may be automatically generated depending on the properties of the control, such as having a minimum length or number of required selections. Using the non-function version of this property replaces it. */
   description?: React.ReactNode | ((existingMessage?: string) => React.ReactNode)
   isHidden?: boolean | ConditionalBooleanFunction<T>
@@ -94,6 +94,7 @@ export interface TextareaControlConfig {
   characterLimit?: number
   allowHorizontalResize?: boolean
   allowVerticalResize?: boolean
+  placeholder?: string
 }
 
 export type AttachmentControlConfig = Omit<

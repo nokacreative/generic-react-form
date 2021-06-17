@@ -28,6 +28,7 @@ export function FormTextarea<T>(
           props.saveValueToState(props.propertyPath, value)
           if (props.validateOnBlur) props.validate(value)
         },
+        placeholder: props.placeholder,
       }}
     />
   )
