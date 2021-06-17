@@ -1,7 +1,7 @@
 {
   "name": "@nokacreative/generic-react-form",
   "description": "A generic form made in react.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -15,6 +15,10 @@
   "repository": "nokacreative/generic-react-form",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -29,10 +33,6 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-regular-svg-icons": "^5.15.3",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.170",
