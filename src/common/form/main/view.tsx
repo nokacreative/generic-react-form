@@ -42,6 +42,7 @@ export function Form<T extends object>(props: Props<T>) {
   const formValidatorPropertyPaths = useRef<string[]>([])
   const [triggerFullValidation, setTriggerFullValidation] = useState<boolean>(false)
   const isAwaitingSubmit = useRef<boolean>(false)
+  const submitButtonClicked = useRef<boolean>(false)
 
   const [showPageError, setShowPageError] = useState<boolean>(false)
   const pageErrorRef = useRef<HTMLDivElement>(null)
@@ -126,7 +127,7 @@ export function Form<T extends object>(props: Props<T>) {
         usesValidateMode(props.validationMode, ValidationMode.CHANGE),
         state.errors,
         props.errorMessages || {},
-        props.hideErrorsOnLoad ? !state.isDirty : false,
+        props.hideErrorsOnLoad ? !state.isDirty && !submitButtonClicked.current : false,
         controlValidators.current,
         setTriggerFormValidator,
         (propertyPath: string) =>
@@ -213,8 +214,8 @@ export function Form<T extends object>(props: Props<T>) {
         setShowPageError(false)
       } else {
         if (
-          pageErrorDisplayMode !== PageErrorDisplayMode.HIDE &&
-          onSubmissionError === SubmissionErrorScrollMode.PAGE_ERROR
+          onSubmissionError === SubmissionErrorScrollMode.PAGE_ERROR &&
+          props.pageErrorDisplayMode !== PageErrorDisplayMode.HIDE
         ) {
           scrollToElement(pageErrorRef.current, props.scrollContainerSelector)
         } else if (
@@ -299,6 +300,7 @@ export function Form<T extends object>(props: Props<T>) {
 
   const submitButton = React.useMemo(
     () =>
+      props.onSubmit &&
       !props.isReadOnly && (
         <button
           type="submit"
@@ -314,12 +316,13 @@ export function Form<T extends object>(props: Props<T>) {
       props.disableSubmitWhenInvalid,
       state.errors,
       props.submitButtonText,
+      props.onSubmit,
     ]
   )
 
   return (
     <>
-      {showPageError && (
+      {showPageError && props.pageErrorDisplayMode !== PageErrorDisplayMode.HIDE && (
         <PageError
           ref={pageErrorRef}
           message={props.pageErrorMessage || 'Please fix the errors on the page.'}
@@ -330,13 +333,12 @@ export function Form<T extends object>(props: Props<T>) {
         className={`${NOKA_COLORS_CLASS} ${props.className || ''}`}
         onSubmit={(e) => {
           e.preventDefault()
+          submitButtonClicked.current = true
           if (usesValidateMode(props.validationMode, ValidationMode.SUBMIT)) {
             isAwaitingSubmit.current = true
             setTriggerFullValidation(true)
           } else if (Object.keys(state.errors).length > 0) {
-            if (props.pageErrorDisplayMode !== PageErrorDisplayMode.HIDE) {
-              setShowPageError(true)
-            }
+            setShowPageError(true)
           } else if (props.onSubmit) {
             props.onSubmit(state.data)
           }

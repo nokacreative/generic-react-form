@@ -77,14 +77,6 @@ function validateControl<T>(
       return
     }
 
-    if (controlConfig.validator) {
-      const customErrorMessage = controlConfig.validator(value, data)
-      if (customErrorMessage != null) {
-        setControlError(controlConfig.propertyPath, ErrorType.CUSTOM, customErrorMessage)
-        return
-      }
-    }
-
     if (isRequired) {
       if (controlConfig.type === FormControlType.CHECKBOX_GROUP) {
         if (
@@ -148,6 +140,14 @@ function validateControl<T>(
         value.length > controlConfig.maxNumSelections
       ) {
         setControlError(controlConfig.propertyPath, ErrorType.CHECKBOX_MAX_SELECTIONS)
+        return
+      }
+    }
+
+    if (controlConfig.validator) {
+      const customErrorMessage = controlConfig.validator(value, data)
+      if (customErrorMessage != null) {
+        setControlError(controlConfig.propertyPath, ErrorType.CUSTOM, customErrorMessage)
         return
       }
     }
@@ -359,11 +359,13 @@ export function generateControl<T>(
         )
       })()}
       growthRatio={controlConfig.growthRatio}
+      width={controlConfig.width}
       alignRight={controlConfig.alignRight}
       propertyPath={propertyPath as string}
       description={getControlDescription(controlConfig)}
       onInfoIconClicked={controlConfig.onInfoIconClicked}
       infoIconTooltip={infoIconTooltip}
+      isInline={controlConfig.isInline}
       key={key}
     >
       {control}

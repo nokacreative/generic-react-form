@@ -7,12 +7,14 @@ type Props = {
   children: React.ReactNode
   hasError?: boolean
   errorMessage?: string
+  width?: string
   growthRatio?: number
   alignRight?: boolean
   propertyPath: string
   description?: string
   onInfoIconClicked?: () => void
   infoIconTooltip?: string
+  isInline?: boolean
 }
 
 export const CONTROL_ID_DATA_ATTR = 'data-controlid'
@@ -24,6 +26,9 @@ export function FormControlWrapper(props: Props) {
   }
   if (props.alignRight) {
     classes.push('right-aligned')
+  }
+  if (props.isInline) {
+    classes.push('inline')
   }
 
   return (
@@ -48,7 +53,9 @@ export function FormControlWrapper(props: Props) {
       {props.description && (
         <div className="control-description">{props.description}</div>
       )}
-      {props.children}
+      <div className="control-child-wrapper" style={{ width: props.width }}>
+        {props.children}
+      </div>
       {props.errorMessage && <InlineError message={props.errorMessage} />}
     </div>
   )

@@ -64,10 +64,29 @@ form {
     &.right-aligned {
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
 
-      & > * {
+      &:not(.inline) > * {
         margin-left: auto;
         justify-content: flex-end;
+      }
+    }
+
+    &.inline {
+      flex-direction: row;
+      align-items: center;
+
+      label {
+        margin-right: 0.5rem;
+      }
+
+      &.right-aligned {
+        .error-message {
+          margin-right: 1rem;
+          order: -1;
+          position: relative;
+          margin-top: 0;
+        }
       }
     }
 
@@ -87,6 +106,10 @@ form {
 
     label + .control-description {
       margin-top: -0.5em;
+    }
+
+    .control-child-wrapper {
+      width: 100%;
     }
 
     &.error {

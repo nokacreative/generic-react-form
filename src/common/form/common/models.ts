@@ -22,12 +22,17 @@ interface BaseControlConfig<T> {
   isRequired?: boolean | ConditionalBooleanFunction<T>
   isDisabled?: boolean | ConditionalBooleanFunction<T>
   isReadOnly?: boolean | ConditionalBooleanFunction<T>
+  /** From 0 to 2, used as flex-grow */
   growthRatio?: number
+  /** A static width to use */
+  width?: string
   hideErrorMessage?: boolean
   alignRight?: boolean
   /** Return an error message if there is an error, or undefined | null otherwise */
   validator?: (fieldValue: any, formData: T) => string | undefined | null
   onInfoIconClicked?: () => void
+  /** Whether or not the label should be inline with the control */
+  isInline?: boolean
 }
 
 export interface BaseInputControlConfig {

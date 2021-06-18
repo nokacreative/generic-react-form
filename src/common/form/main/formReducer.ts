@@ -12,12 +12,20 @@ export const initialFormState = <T>(defaultValues: T): FormState<T> => ({
 export function createFormReducer<T extends object>() {
   return (state: FormState<T>, action: FormAction<T>): FormState<T> => {
     switch (action.type) {
-      case FormActionType.SET_VALUE:
+      case FormActionType.SET_VALUE: {
+        const newData = set(cloneDeep(state.data), action.propertyPath, action.value)
+        if (!state.isDirty) {
+          const existingData = get(state.data, action.propertyPath)
+          if (newData === existingData) {
+            return state
+          }
+        }
         return {
           ...state,
           isDirty: true,
-          data: set(cloneDeep(state.data), action.propertyPath, action.value),
+          data: newData,
         }
+      }
       case FormActionType.REPLACE_DATA:
         return {
           ...state,
