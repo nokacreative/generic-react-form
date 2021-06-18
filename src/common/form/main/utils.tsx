@@ -87,6 +87,10 @@ function validateControl<T>(
           return
         }
         if (!value || value.length === 0) {
+          if (controlConfig.selections.length === 1) {
+            setControlError(controlConfig.propertyPath, ErrorType.REQUIRED)
+            return
+          }
           setControlError(controlConfig.propertyPath, ErrorType.CHECKBOX_REQUIRED)
           return
         }

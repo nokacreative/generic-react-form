@@ -37,6 +37,8 @@ export type Props<T> = {
   disableSubmitWhenInvalid?: boolean
   /** Used when validating on load, to hide errors before the form has been touched. */
   hideErrorsOnLoad?: boolean
+  /** Hides all errors until the submit button has been clicked. */
+  hideErrorsBeforeSubmit?: boolean
   submitButtonText?: string
 }
 

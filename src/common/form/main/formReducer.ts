@@ -16,7 +16,7 @@ export function createFormReducer<T extends object>() {
         const newData = set(cloneDeep(state.data), action.propertyPath, action.value)
         if (!state.isDirty) {
           const existingData = get(state.data, action.propertyPath)
-          if (newData === existingData) {
+          if (get(newData, action.propertyPath) === existingData) {
             return state
           }
         }

@@ -127,7 +127,15 @@ export function Form<T extends object>(props: Props<T>) {
         usesValidateMode(props.validationMode, ValidationMode.CHANGE),
         state.errors,
         props.errorMessages || {},
-        props.hideErrorsOnLoad ? !state.isDirty && !submitButtonClicked.current : false,
+        (() => {
+          if (props.hideErrorsOnLoad) {
+            return !state.isDirty
+          }
+          if (props.hideErrorsBeforeSubmit) {
+            return !submitButtonClicked.current
+          }
+          return false
+        })(),
         controlValidators.current,
         setTriggerFormValidator,
         (propertyPath: string) =>
