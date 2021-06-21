@@ -78,6 +78,27 @@ export function Form<T extends object>(props: Props<T>) {
     [dispatch]
   )
 
+  const isFirstRun = useRef<boolean>(true)
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false
+      return
+    }
+    if (props.serverErrors) {
+      Object.entries(props.serverErrors).map(([propertyPath, message]) =>
+        setControlError(propertyPath, ErrorType.CUSTOM, message)
+      )
+    } else {
+      validateEntireForm(
+        controlValidators.current,
+        state.data,
+        props.validator,
+        setControlError,
+        formValidatorPropertyPaths
+      )
+    }
+  }, [props.serverErrors, setControlError])
+
   const saveValueToState = useCallback(
     (
       propertyPath: string | keyof T,

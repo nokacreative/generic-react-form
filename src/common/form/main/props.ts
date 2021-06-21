@@ -40,6 +40,7 @@ export type Props<T> = {
   /** Hides all errors until the submit button has been clicked. */
   hideErrorsBeforeSubmit?: boolean
   submitButtonText?: string
+  serverErrors?: { [propertyPath: string]: string }
 }
 
 export function validateProps<T>(props: Props<T>) {
