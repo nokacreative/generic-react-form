@@ -74,6 +74,11 @@ export function MoneyInput(props: Props) {
           if (props.onChange) props.onChange(parseFloat(value))
         }}
         onBlur={onBlur}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            onBlur()
+          }
+        }}
         className="money"
       />
       <input

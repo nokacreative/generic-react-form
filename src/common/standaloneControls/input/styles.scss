@@ -1,0 +1,15 @@
+.input-wrapper {
+  position: relative;
+
+  &.password {
+    input {
+      padding-right: 2.5rem;
+    }
+
+    .icon {
+      position: absolute;
+      right: 0.5rem;
+      top: 0.5rem;
+    }
+  }
+}

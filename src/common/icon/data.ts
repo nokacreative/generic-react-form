@@ -11,6 +11,7 @@ import {
   faFileAlt,
   faCalendarAlt,
   faClock,
+  faEyeSlash,
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faEllipsisV,
@@ -22,6 +23,7 @@ import {
   faRedoAlt,
   faInfoCircle,
   faTimes,
+  faEye,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const GeneralIcons = {
@@ -36,6 +38,8 @@ export const GeneralIcons = {
   Calendar: faCalendarAlt,
   Clock: faClock,
   Info: faInfoCircle,
+  Visible: faEye,
+  Hidden: faEyeSlash,
 }
 
 export const FileIcons = {
