@@ -41,6 +41,10 @@ export type Props<T> = {
   hideErrorsBeforeSubmit?: boolean
   submitButtonText?: string
   serverErrors?: { [propertyPath: string]: string }
+  htmlProps?: Omit<
+    React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
+    'id' | 'className' | 'onSubmit'
+  >
 }
 
 export function validateProps<T>(props: Props<T>) {

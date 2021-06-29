@@ -107,6 +107,8 @@ export type AttachmentControlConfig = Omit<
   'isDisabled' | 'defaultValue'
 > & {
   type: FormControlType.ATTACHMENT
+  /** Whether to save the full File object, or just its name. False by default. */
+  saveFullFile?: boolean
 }
 
 export type DropdownControlConfig<T> = DropdownProps & {

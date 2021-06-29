@@ -358,6 +358,7 @@ export function Form<T extends object>(props: Props<T>) {
         />
       )}
       <form
+        {...(props.htmlProps || {})}
         id={props.id}
         className={`${NOKA_COLORS_CLASS} ${props.className || ''}`}
         onSubmit={(e) => {

@@ -32,4 +32,5 @@ export type Props = {
   uploadIcon?: IconDefinition | null
   isDisabled?: boolean
   defaultValue?: FileList | File | string | null
+  inputName?: string
 }

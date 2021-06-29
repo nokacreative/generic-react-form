@@ -2,7 +2,7 @@ import { FormInput } from './input.view'
 import { FormRadio } from './radio.view'
 import { FormCheckbox } from './checkbox.view'
 import { FormTextarea } from './textarea.view'
-import { FormAttachmentButton } from './attachment.view'
+import { FormAttachmentControl } from './attachment.view'
 import { FormDropdown } from './dropdown.view'
 import { FormMoneyInput } from './money.view'
 import { FormControlWrapper } from './wrapper.view'
@@ -14,7 +14,7 @@ export const FormControls = {
   Radio: FormRadio,
   Checkbox: FormCheckbox,
   Textarea: FormTextarea,
-  Attachment: FormAttachmentButton,
+  Attachment: FormAttachmentControl,
   Dropdown: FormDropdown,
   Money: FormMoneyInput,
   DateInput: FormDateInput,

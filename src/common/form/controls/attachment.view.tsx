@@ -9,7 +9,7 @@ export function formatFilename(filename: string) {
   return filename.replace(/[^a-zA-Z0-9-\\.]/g, '')
 }
 
-export function FormAttachmentButton<T>(
+export function FormAttachmentControl<T>(
   props: BaseFormControlProps<T> & SpecificFormControlProps<AttachmentControlConfig>
 ) {
   const shouldValidate = props.validateOnBlur || props.validateOnChange
@@ -23,11 +23,14 @@ export function FormAttachmentButton<T>(
         if (props.isMultiple) {
           props.saveValueToState(
             props.propertyPath,
-            files.map((f) => f.name),
+            props.saveFullFile ? files : files.map((f) => f.name),
             FormActionType.ADD_ARRAY_VALUE
           )
         } else {
-          props.saveValueToState(props.propertyPath, files[0].name)
+          props.saveValueToState(
+            props.propertyPath,
+            props.saveFullFile ? files[0] : files[0].name
+          )
         }
         if (shouldValidate) props.validate(null)
       }}
@@ -53,6 +56,7 @@ export function FormAttachmentButton<T>(
       totalFileSizeLimit={props.totalFileSizeLimit}
       isDisabled={props.isDisabled}
       isReadOnly={props.isReadOnly}
+      inputName={props.propertyPath as string}
     />
   )
 }

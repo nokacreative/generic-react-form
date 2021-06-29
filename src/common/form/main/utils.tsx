@@ -101,20 +101,16 @@ function validateControl<T>(
       }
     }
 
-    if (controlConfig.type === FormControlType.INPUT) {
-      if (controlConfig.minLength && (!value || value.length < controlConfig.minLength)) {
+    if (value && controlConfig.type === FormControlType.INPUT) {
+      if (controlConfig.minLength && value.length < controlConfig.minLength) {
         setControlError(controlConfig.propertyPath, ErrorType.MIN_LENGTH)
         return
       }
-      if (controlConfig.maxLength && value && value.length > controlConfig.maxLength) {
+      if (controlConfig.maxLength && value.length > controlConfig.maxLength) {
         setControlError(controlConfig.propertyPath, ErrorType.MAX_LENGTH)
         return
       }
-      if (
-        controlConfig.inputType === InputType.EMAIL &&
-        value &&
-        !EMAIL_REGEX.test(value)
-      ) {
+      if (controlConfig.inputType === InputType.EMAIL && !EMAIL_REGEX.test(value)) {
         setControlError(controlConfig.propertyPath, ErrorType.EMAIL)
         return
       }

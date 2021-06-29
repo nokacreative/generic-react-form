@@ -226,6 +226,7 @@ export function FileUploader(props: Props) {
           <input
             ref={fileBrowserButton}
             type="file"
+            name={props.inputName}
             onChange={startUpload}
             multiple={props.isMultiple}
             accept={props.supportedFileExtensions?.join(',')}
