@@ -80,6 +80,9 @@ export function FileUploader(props: Props) {
       } else {
         setFiles(newFiles)
       }
+      if (fileBrowserButton.current) {
+        fileBrowserButton.current.value = ''
+      }
     }
   }
 
