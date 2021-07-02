@@ -33,6 +33,8 @@ interface BaseControlConfig<T> {
   onInfoIconClicked?: () => void
   /** Whether or not the label should be inline with the control */
   isInline?: boolean
+  /** Anything that should be added to the control */
+  customElement?: React.ReactNode | ((formData: T) => React.ReactNode)
 }
 
 export interface BaseInputControlConfig {

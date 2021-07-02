@@ -15,6 +15,7 @@ type Props = {
   onInfoIconClicked?: () => void
   infoIconTooltip?: string
   isInline?: boolean
+  customElement?: React.ReactNode
 }
 
 export const CONTROL_ID_DATA_ATTR = 'data-controlid'
@@ -55,6 +56,7 @@ export function FormControlWrapper(props: Props) {
       )}
       <div className="control-child-wrapper" style={{ width: props.width }}>
         {props.children}
+        {props.customElement}
       </div>
       {props.errorMessage && <InlineError message={props.errorMessage} />}
     </div>

@@ -8,17 +8,19 @@
 
   span {
     padding: 1em;
+    line-height: 1rem;
   }
 
   .icon {
-    padding: 1em 1.8em;
-    padding-bottom: 0.8em;
     height: 100%;
+    padding: 1em 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     svg {
       width: 1.5em;
       height: 1.5em;
-      margin-left: -0.65em;
     }
   }
 }

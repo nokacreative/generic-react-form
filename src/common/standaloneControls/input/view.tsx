@@ -69,6 +69,7 @@ export function Input({ type, ...props }: Props) {
         <Icon
           icon={showPassword ? GeneralIcons.Hidden : GeneralIcons.Visible}
           onClick={() => setShowPassword(!showPassword)}
+          tooltip={showPassword ? 'Hide' : 'Show'}
         />
       )}
     </div>

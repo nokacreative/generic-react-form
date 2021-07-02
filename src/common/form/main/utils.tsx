@@ -251,6 +251,11 @@ export function generateControl<T>(
   const isRequired = !!getBooleanResult(controlConfig.isRequired, data, isFormRequired)
   const isReadOnly = !!getBooleanResult(controlConfig.isReadOnly, data, isFormReadOnly)
 
+  const customElement =
+    typeof controlConfig.customElement === 'function'
+      ? controlConfig.customElement(data)
+      : controlConfig.customElement
+
   const controlValidator = validateControl(
     propertyPath,
     controlConfig,
@@ -366,6 +371,7 @@ export function generateControl<T>(
       onInfoIconClicked={controlConfig.onInfoIconClicked}
       infoIconTooltip={infoIconTooltip}
       isInline={controlConfig.isInline}
+      customElement={customElement}
       key={key}
     >
       {control}

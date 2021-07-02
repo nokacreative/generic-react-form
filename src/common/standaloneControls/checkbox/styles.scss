@@ -18,8 +18,9 @@ label.radioOrCheckbox {
         border-radius: 50%;
         background: var(--label);
         position: absolute;
-        top: 9px;
-        left: 9px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         color-adjust: exact;
       }
       & + .checkbox-control .icon {
