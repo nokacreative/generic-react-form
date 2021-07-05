@@ -21,6 +21,12 @@ export type BaseProps = {
   onOptionSelected?: (option: DropdownOption | undefined) => void
   /** All selected options--useful with isMultiple */
   onOptionsChanged?: (options: DropdownOption[] | undefined) => void
+  allowAdditions?: boolean
+  addNewItemText?: string
+  onAddNewItem?: (
+    text: string,
+    selectOption: (option: DropdownOption | undefined) => void
+  ) => void
 }
 
 export type Props = BaseProps & {

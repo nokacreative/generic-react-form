@@ -60,6 +60,9 @@ export function FormDropdown<T>(
       saveSelection={props.saveSelection}
       extraClassName={props.extraClassName}
       emptyOptionsText={props.emptyOptionsText}
+      allowAdditions={props.allowAdditions}
+      addNewItemText={props.addNewItemText}
+      onAddNewItem={props.onAddNewItem}
     />
   )
 }

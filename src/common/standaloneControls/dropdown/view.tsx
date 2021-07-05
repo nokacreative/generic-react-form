@@ -168,6 +168,8 @@ export function Dropdown(props: Props) {
   const filteredOptions = filterOptions(configOptions)
   const filteredPinnedOptions = filterOptions(pinnedOptions)
 
+  const filteredOptionsExist = filteredOptions.length > 0
+
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     e.stopPropagation()
     if (e.key === 'ArrowDown') {
@@ -183,7 +185,9 @@ export function Dropdown(props: Props) {
       }
     } else if (e.key === 'Enter') {
       e.preventDefault()
-      if (hoveredOption) {
+      if (!filteredOptionsExist && props.allowAdditions && filter && props.onAddNewItem) {
+        props.onAddNewItem(filter, selectOption)
+      } else if (hoveredOption) {
         selectOption(hoveredOption)
         setHoveredOption(undefined)
       } else if (filter && filteredOptions.length === 1) {
@@ -309,8 +313,20 @@ export function Dropdown(props: Props) {
               <div className="pinned-value-separator" />
             </>
           )}
-          {filteredOptions.length === 0 && (
+          {!filteredOptionsExist && !props.allowAdditions && (
             <div className="dropdown-option">{props.emptyOptionsText || '(Empty)'}</div>
+          )}
+          {!filteredOptionsExist && props.allowAdditions && filter && (
+            <div
+              className="dropdown-option"
+              onClick={() => {
+                if (props.onAddNewItem) {
+                  props.onAddNewItem(filter, selectOption)
+                }
+              }}
+            >
+              {props.addNewItemText || 'Add new item...'}
+            </div>
           )}
           {filteredOptions.map((o, i) => (
             <Option
