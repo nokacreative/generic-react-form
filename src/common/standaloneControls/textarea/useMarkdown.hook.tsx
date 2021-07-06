@@ -1,13 +1,11 @@
 import { ChangeEvent, ChangeEventHandler, useMemo, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
 
 import { Icon } from '../../icon'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
 import { AddTextSettingResults, AddTextSettings, CONTROLS } from './utils'
-import { Checkbox } from '../checkbox/view'
+import { MarkdownRenderer } from '../../markdownRenderer'
 
 export function useMarkdown(
   use: boolean,
@@ -115,34 +113,7 @@ export function useMarkdown(
     []
   )
 
-  const previewArea = useMemo(
-    () => (
-      <ReactMarkdown
-        remarkPlugins={[[gfm]]}
-        components={{
-          input: (props: any) => {
-            return (
-              <Checkbox
-                key={props.key}
-                label=""
-                htmlProps={{ checked: props.checked, disabled: props.disabled }}
-              />
-            )
-          },
-          li: (props: any) => {
-            if (props.checked !== null) {
-              const { children, ...rest } = props
-              return <li {...rest}>{children[0]}</li>
-            }
-            return <li {...props} />
-          },
-        }}
-      >
-        {value}
-      </ReactMarkdown>
-    ),
-    [value]
-  )
+  const previewArea = useMemo(() => <MarkdownRenderer value={value} />, [value])
 
   return {
     formattingControlsJsx: jsx,

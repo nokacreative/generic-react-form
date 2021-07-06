@@ -121,7 +121,7 @@ export const CONTROLS: (FormattingControl | null)[] = [
       },
       withSelections: (selection: string) => {
         if (selection.startsWith('http://') || selection.startsWith('https://')) {
-          const newValue = `[link](${selection})`
+          const newValue = `[text](${selection})`
           return {
             value: newValue,
             selectionRangeStart: 1,
@@ -138,11 +138,38 @@ export const CONTROLS: (FormattingControl | null)[] = [
       },
     },
   },
-  /*{
+  {
     icon: faImage,
     tooltip: 'Image',
-    settings: null,
-  },*/
+    settings: {
+      noSelections: (fullText: string) => {
+        const newValue = `${fullText}\n\n![](url)`
+        const length = newValue.length
+        return {
+          value: newValue,
+          selectionRangeStart: length - 4,
+          selectionRangeEnd: length - 1,
+        }
+      },
+      withSelections: (selection: string) => {
+        if (selection.startsWith('http://') || selection.startsWith('https://')) {
+          const newValue = `![text](${selection})`
+          return {
+            value: newValue,
+            selectionRangeStart: 1,
+            selectionRangeEnd: 5,
+          }
+        }
+        const newValue = `[${selection}](url)`
+        const length = newValue.length
+        return {
+          value: newValue,
+          selectionRangeStart: length - 4,
+          selectionRangeEnd: length - 1,
+        }
+      },
+    },
+  },
   {
     icon: faList,
     tooltip: 'Bulleted List',

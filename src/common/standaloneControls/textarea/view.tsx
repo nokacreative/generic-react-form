@@ -21,7 +21,7 @@ export type Props = {
 
 export function Textarea(props: Props) {
   const classNames = []
-  if (props.characterLimit && props.characterLimit > 300) {
+  if (!props.characterLimit || props.characterLimit > 300) {
     classNames.push('long')
   }
   if (props.allowHorizontalResize && props.allowVerticalResize) {
