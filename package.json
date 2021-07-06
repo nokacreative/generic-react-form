@@ -26,7 +26,9 @@
     "lodash": "^4.17.21",
     "node-sass": "5.0.0",
     "react-datepicker": "^4.1.1",
-    "react-scripts": "4.0.3"
+    "react-markdown": "^6.0.2",
+    "react-scripts": "4.0.3",
+    "remark-gfm": "^1.0.0"
   },
   "peerDependencies": {
     "react": "^17.0.2",

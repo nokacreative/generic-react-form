@@ -29,6 +29,27 @@
     right: 10px;
     bottom: 10px;
   }
+
+  .textarea-formatting-controls {
+    .icon {
+      padding: 0 0.5em;
+    }
+
+    .spacer {
+      display: inline-block;
+      width: 2rem;
+    }
+
+    .task-list-item {
+      list-style: none;
+      display: flex;
+
+      .radioOrCheckbox {
+        flex: 0;
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 @media print {

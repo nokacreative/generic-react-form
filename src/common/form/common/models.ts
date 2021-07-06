@@ -102,6 +102,7 @@ export interface TextareaControlConfig {
   allowHorizontalResize?: boolean
   allowVerticalResize?: boolean
   placeholder?: string
+  useMarkdown?: boolean
 }
 
 export type AttachmentControlConfig = Omit<

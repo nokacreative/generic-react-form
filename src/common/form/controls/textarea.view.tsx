@@ -30,6 +30,7 @@ export function FormTextarea<T>(
         },
         placeholder: props.placeholder,
       }}
+      useMarkdown={props.useMarkdown}
     />
   )
 }
