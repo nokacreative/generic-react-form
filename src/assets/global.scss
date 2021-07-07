@@ -11,6 +11,7 @@
   --controlHeight: 42px;
   --controlTextSize: 0.8em;
   --controlBorderRadius: 2px;
+  --controlPadding: 7px 12px;
 
   --disabledControlBg: #eaeaea;
   --disabledControlText: #8c8c8c;
@@ -22,8 +23,10 @@
 }
 
 input.noka-form-colors,
+.input.noka-form-colors,
 textarea.noka-form-colors,
 .noka-form-colors input,
+.noka-form-colors .input,
 .noka-form-colors textarea {
   width: 100%;
   font-family: inherit;
@@ -33,7 +36,7 @@ textarea.noka-form-colors,
   color: var(--controlText);
   border-radius: var(--controlBorderRadius);
   height: var(--controlHeight);
-  padding: 7px 12px;
+  padding: var(--controlPadding);
 
   &:active,
   &:focus {

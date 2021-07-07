@@ -226,13 +226,10 @@ export function Dropdown(props: Props) {
     if (filter !== undefined) {
       return filter
     }
-    if (props.isMultiple && selectedOptions && selectedOptions.length > 0) {
-      return selectedOptions.map((o) => o.text).join(', ')
-    }
     if (hoveredOption) {
       return hoveredOption.text
     }
-    if (selectedOptions && selectedOptions.length > 0) {
+    if (!props.isMultiple && selectedOptions && selectedOptions.length > 0) {
       return selectedOptions[0].text
     }
     return ''
@@ -257,27 +254,45 @@ export function Dropdown(props: Props) {
       }}
       ref={outsideRef}
     >
-      <input
-        placeholder={props.placeholder}
-        className={`dropdown-input ${withClearButton ? 'withClearButton' : ''}`}
-        value={inputValue}
-        onChange={(e) => setFilter(e.target.value?.trim().toLocaleLowerCase())}
-        onKeyDown={onKeyDown}
-        role="combobox"
-        aria-controls={id}
-        aria-haspopup="listbox"
-        aria-expanded={isActive}
-        aria-activedescendant={
-          selectedOptions && selectedOptions.length > 0
-            ? selectedOptions[0].text
-            : undefined
-        }
-        aria-autocomplete="list"
-        disabled={props.isDisabled}
-        readOnly={props.allowFiltering === false}
-        aria-multiselectable={props.isMultiple}
-        {...props.filterHtmlProps}
-      />
+      <div className="input">
+        {props.isMultiple &&
+          selectedOptions?.map((o, i) => (
+            <div className="option-tag" key={`${id}-selected-option-tag-${i}`}>
+              {o.text}
+              <span
+                className="option-tag-remove"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  selectOption(o)
+                }}
+              >
+                &times;
+              </span>
+            </div>
+          ))}
+        <input
+          placeholder={props.placeholder}
+          className={`dropdown-input ${withClearButton ? 'withClearButton' : ''}`}
+          value={inputValue}
+          onChange={(e) => setFilter(e.target.value?.trim().toLocaleLowerCase())}
+          onKeyDown={onKeyDown}
+          role="combobox"
+          aria-controls={id}
+          aria-haspopup="listbox"
+          aria-expanded={isActive}
+          aria-activedescendant={
+            selectedOptions && selectedOptions.length > 0
+              ? selectedOptions[0].text
+              : undefined
+          }
+          aria-autocomplete="list"
+          disabled={props.isDisabled}
+          readOnly={props.allowFiltering === false}
+          aria-multiselectable={props.isMultiple}
+          {...props.filterHtmlProps}
+        />
+      </div>
       <input
         style={{ display: 'none' }}
         defaultValue={props.defaultValue}
