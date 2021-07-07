@@ -19,6 +19,7 @@
       flex: 1;
       border: none !important;
       background: none !important;
+      padding-left: 0 !important;
 
       &.withClearButton {
         padding-right: 42px;
@@ -50,11 +51,11 @@
         }
       }
 
-      &:first-child {
+      &:last-child {
         margin: var(--controlPadding);
         margin-top: 0;
         margin-bottom: 0;
-        margin-right: 0;
+        margin-left: 0;
       }
     }
   }

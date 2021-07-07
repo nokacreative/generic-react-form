@@ -81,14 +81,16 @@ export function useMarkdown(
           currentSelectionDeltaAfterChange.current = 0
           setValue((value) => getResult(settings.noSelections(value)))
         } else {
-          currentSelectionDeltaAfterChange.current =
-            settings.selectionDeltaAfterChange || 0
           setValue((value) => {
             const parts = {
               start: value.slice(0, selection.start),
               selection: value.slice(selection.start, selection.end),
               end: value.slice(selection.end),
             }
+            currentSelectionDeltaAfterChange.current =
+              typeof settings.selectionDeltaAfterChange === 'function'
+                ? settings.selectionDeltaAfterChange(parts.selection)
+                : settings.selectionDeltaAfterChange || 0
             const result = getResult(settings.withSelections(parts.selection))
             return `${parts.start}${result}${parts.end}`
           })

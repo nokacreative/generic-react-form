@@ -1,5 +1,7 @@
 import ReactMarkdown, { ReactMarkdownOptions } from 'react-markdown'
 import gfm from 'remark-gfm'
+// @ts-expect-error
+import rehypeHighlight from 'rehype-highlight'
 
 import './styles.scss'
 
@@ -11,14 +13,19 @@ const DEFAULT_OPTIONS: any = {
       <Checkbox
         key={props.key}
         label=""
-        htmlProps={{ checked: props.checked, disabled: props.disabled }}
+        htmlProps={{ defaultChecked: props.checked, disabled: props.disabled }}
       />
     )
   },
   li: (props: any) => {
     if (props.checked !== null) {
       const { children, ...rest } = props
-      return <li {...rest}>{children[0]}</li>
+      return (
+        <li {...rest}>
+          {children[0]}
+          {children[2]}
+        </li>
+      )
     }
     return <li {...props} />
   },
@@ -31,7 +38,7 @@ type Props = {
 
 export const MarkdownRenderer = ({ value, options }: Props) => (
   <ReactMarkdown
-    remarkPlugins={[[gfm]]}
+    remarkPlugins={[[gfm, rehypeHighlight]]}
     components={options ? options(DEFAULT_OPTIONS) : DEFAULT_OPTIONS}
     className="noka-markdown-renderer"
   >

@@ -8,6 +8,7 @@ import {
   faList,
   faListOl,
   faQuoteRight,
+  faStrikethrough,
 } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faImage } from '@fortawesome/free-regular-svg-icons'
 
@@ -22,7 +23,7 @@ export type AddTextSettingResults =
 export interface AddTextSettings {
   noSelections: (fullText: string) => AddTextSettingResults
   withSelections: (selection: string) => AddTextSettingResults
-  selectionDeltaAfterChange?: number
+  selectionDeltaAfterChange?: number | ((selection: string) => number)
 }
 
 export function containsLinebreaks(text: string) {
@@ -42,7 +43,14 @@ export const CONTROLS: (FormattingControl | null)[] = [
     tooltip: 'Header',
     settings: {
       noSelections: (fullText: string) => `${fullText}### `,
-      withSelections: (selection: string) => `### ${selection}`,
+      withSelections: (selection: string) => {
+        const [firstLine, ...otherLines] = selection.split('\n')
+        return {
+          value: `### ${firstLine}\n\n${otherLines.join('\n')}`,
+          selectionRangeStart: 4,
+          selectionRangeEnd: 4 + firstLine.length,
+        }
+      },
     },
   },
   {
@@ -79,6 +87,23 @@ export const CONTROLS: (FormattingControl | null)[] = [
       selectionDeltaAfterChange: 1,
     },
   },
+  {
+    icon: faStrikethrough,
+    tooltip: 'Strikethrough',
+    settings: {
+      noSelections: (fullText: string) => {
+        const newValue = `${fullText}~~strikethrough~~`
+        const length = newValue.length
+        return {
+          value: newValue,
+          selectionRangeStart: length - 15,
+          selectionRangeEnd: length - 2,
+        }
+      },
+      withSelections: (selection: string) => `~~${selection}~~`,
+      selectionDeltaAfterChange: 1,
+    },
+  },
   null,
   {
     icon: faCode,
@@ -93,16 +118,26 @@ export const CONTROLS: (FormattingControl | null)[] = [
           selectionRangeEnd: length - 1,
         }
       },
-      withSelections: (selection: string) => `\`${selection}\``,
-      selectionDeltaAfterChange: 1,
+      withSelections: (selection: string) =>
+        containsLinebreaks(selection)
+          ? '```\n' + selection + '`\n``'
+          : `\`${selection}\``,
+      selectionDeltaAfterChange: (selection: string) =>
+        containsLinebreaks(selection) ? 3 : 1,
     },
   },
   {
     icon: faQuoteRight,
     tooltip: 'Quote',
     settings: {
-      noSelections: (fullText: string) => `${fullText}\n\n>`,
-      withSelections: (selection: string) => `> ${selection}`,
+      noSelections: (fullText: string) => (fullText ? `${fullText}\n\n>` : '>'),
+      withSelections: (selection: string) => {
+        if (containsLinebreaks(selection)) {
+          const lines = selection.split('\n')
+          return lines.map((line) => `> ${line}  `).join('\n')
+        }
+        return `> ${selection}`
+      },
       selectionDeltaAfterChange: 2,
     },
   },
@@ -143,7 +178,8 @@ export const CONTROLS: (FormattingControl | null)[] = [
     tooltip: 'Image',
     settings: {
       noSelections: (fullText: string) => {
-        const newValue = `${fullText}\n\n![](url)`
+        const code = '![](url)'
+        const newValue = fullText ? `${fullText}\n\n${code}` : code
         const length = newValue.length
         return {
           value: newValue,
@@ -156,8 +192,8 @@ export const CONTROLS: (FormattingControl | null)[] = [
           const newValue = `![text](${selection})`
           return {
             value: newValue,
-            selectionRangeStart: 1,
-            selectionRangeEnd: 5,
+            selectionRangeStart: 2,
+            selectionRangeEnd: 6,
           }
         }
         const newValue = `[${selection}](url)`
@@ -170,12 +206,14 @@ export const CONTROLS: (FormattingControl | null)[] = [
       },
     },
   },
+  null,
   {
     icon: faList,
     tooltip: 'Bulleted List',
     settings: {
       noSelections: (fullText: string) => {
-        const newValue = `${fullText}\n\n- Item`
+        const code = '- Item'
+        const newValue = fullText ? `${fullText}\n\n${code}` : code
         const length = newValue.length
         return {
           value: newValue,
@@ -198,7 +236,8 @@ export const CONTROLS: (FormattingControl | null)[] = [
     tooltip: 'Numbered List',
     settings: {
       noSelections: (fullText: string) => {
-        const newValue = `${fullText}\n\n1. Item`
+        const code = '1. Item'
+        const newValue = fullText ? `${fullText}\n\n${code}` : code
         const length = newValue.length
         return {
           value: newValue,
@@ -221,7 +260,8 @@ export const CONTROLS: (FormattingControl | null)[] = [
     tooltip: 'Checklist',
     settings: {
       noSelections: (fullText: string) => {
-        const newValue = `${fullText}\n\n* [ ] Item`
+        const code = '* [ ] Item'
+        const newValue = fullText ? `${fullText}\n\n${code}` : code
         const length = newValue.length
         return {
           value: newValue,
