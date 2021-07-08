@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme'
 import React from 'react'
+import { NOKA_COLORS_CLASS } from '../../assets/constants'
 
 import { GeneralIcons } from './data'
 import { Icon } from './view'
@@ -8,7 +9,7 @@ describe('Icon', () => {
   it('adds the "clickable" className when onClick is provided, and passes down the onClick function', () => {
     const onClick = jest.fn()
     const component = shallow(<Icon icon={GeneralIcons.Add} onClick={onClick} />)
-    expect(component.prop('className')).toEqual('icon clickable ')
+    expect(component.prop('className')).toEqual(`icon ${NOKA_COLORS_CLASS} clickable`)
     expect(component.prop('onClick')).toBe(onClick)
   })
 
@@ -16,7 +17,9 @@ describe('Icon', () => {
     const component = shallow(
       <Icon icon={GeneralIcons.Add} onClick={jest.fn()} extraClassName="asdf" />
     )
-    expect(component.prop('className')).toEqual('icon clickable asdf')
+    expect(component.prop('className')).toEqual(
+      `icon ${NOKA_COLORS_CLASS} clickable asdf`
+    )
   })
 
   it('sets aria-hidden to false when onClick is given', () => {

@@ -5,6 +5,7 @@ import { SizeProp } from '@fortawesome/fontawesome-svg-core'
 
 import './styles.scss'
 import { TooltipLabelMode } from './enums'
+import { NOKA_COLORS_CLASS } from '../../assets/constants'
 
 type Props = {
   icon: IconDefinition
@@ -18,7 +19,7 @@ type Props = {
 
 export function Icon(props: Props) {
   const className = (() => {
-    const classes = ['icon']
+    const classes = ['icon', NOKA_COLORS_CLASS]
     if (props.onClick) {
       classes.push('clickable')
     }
