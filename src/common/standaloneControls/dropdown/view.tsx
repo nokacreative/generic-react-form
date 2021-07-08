@@ -10,11 +10,16 @@ import { NOKA_COLORS_CLASS } from '../../../assets/constants'
 export function Dropdown(props: Props) {
   const configOptions = props.options
 
-  function getDefaultOption() {
+  function getDefaultOptions() {
     if (props.defaultValue === undefined) {
       return undefined
     }
     if (Array.isArray(props.defaultValue)) {
+      if (!props.isMultiple) {
+        throw new Error(
+          'Dropdown: isMultiple must be true when the defaultValue is an array.'
+        )
+      }
       const arr = props.defaultValue as any[]
       return configOptions.filter((o) => arr.includes(o.value))
     }
@@ -45,7 +50,11 @@ export function Dropdown(props: Props) {
 
   useEffect(() => {
     if (Array.isArray(props.defaultValue)) {
-      if (selectedOptions?.every((o) => props.defaultValue.includes(o.value))) {
+      if (
+        selectedOptions &&
+        selectedOptions.length === props.defaultValue.length &&
+        selectedOptions.every((o) => props.defaultValue.includes(o.value))
+      ) {
         return
       }
     } else if (
@@ -54,7 +63,7 @@ export function Dropdown(props: Props) {
     ) {
       return
     }
-    setSelectedOptions(getDefaultOption())
+    setSelectedOptions(getDefaultOptions())
   }, [props.defaultValue])
 
   const isFirstRender = useRef<boolean>(true)
@@ -160,9 +169,11 @@ export function Dropdown(props: Props) {
     : []
 
   function filterOptions(options: DropdownOption[]) {
-    return filter
-      ? options.filter((o) => o.text.toLocaleLowerCase().includes(filter))
-      : options
+    if (filter === undefined) {
+      return options
+    }
+    const cleanedFilter = filter.trim().toLocaleLowerCase()
+    return options.filter((o) => o.text.toLocaleLowerCase().includes(cleanedFilter))
   }
 
   const filteredOptions = filterOptions(configOptions)
@@ -275,7 +286,7 @@ export function Dropdown(props: Props) {
           placeholder={props.placeholder}
           className={`dropdown-input ${withClearButton ? 'withClearButton' : ''}`}
           value={inputValue}
-          onChange={(e) => setFilter(e.target.value?.trim().toLocaleLowerCase())}
+          onChange={(e) => setFilter(e.target.value)}
           onKeyDown={onKeyDown}
           role="combobox"
           aria-controls={id}

@@ -124,11 +124,16 @@ export function useMarkdown(
   const jsx = useMemo(
     () => (
       <section className="textarea-formatting-controls">
-        {CONTROLS.map((c) =>
+        {CONTROLS.map((c, i) =>
           c ? (
-            <Icon icon={c.icon} tooltip={c.tooltip} onClick={addText(c.settings)} />
+            <Icon
+              icon={c.icon}
+              tooltip={c.tooltip}
+              onClick={addText(c.settings)}
+              key={`textarea-formatting-control-${i}`}
+            />
           ) : (
-            <span className="spacer" />
+            <span className="spacer" key={`textarea-formatting-spacer-${i}`} />
           )
         )}
       </section>

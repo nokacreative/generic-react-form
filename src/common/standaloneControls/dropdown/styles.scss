@@ -37,6 +37,13 @@
       margin-left: 0.2em;
       margin-right: 0.2em;
 
+      &:last-of-type {
+        margin: var(--controlPadding);
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 0;
+      }
+
       .option-tag-remove {
         color: var(--controlText);
         margin-left: 0.25em;
@@ -49,13 +56,6 @@
         &:hover {
           color: var(--controlBg);
         }
-      }
-
-      &:last-child {
-        margin: var(--controlPadding);
-        margin-top: 0;
-        margin-bottom: 0;
-        margin-left: 0;
       }
     }
   }
