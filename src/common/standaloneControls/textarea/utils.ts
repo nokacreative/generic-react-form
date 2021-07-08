@@ -9,6 +9,7 @@ import {
   faListOl,
   faQuoteRight,
   faStrikethrough,
+  faTable,
 } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faImage } from '@fortawesome/free-regular-svg-icons'
 
@@ -21,8 +22,16 @@ export type AddTextSettingResults =
     }
 
 export interface AddTextSettings {
-  noSelections: (fullText: string) => AddTextSettingResults
-  withSelections: (selection: string) => AddTextSettingResults
+  noSelections: (
+    fullText: string,
+    textIsEmpty: boolean,
+    numLineBreaksAtEndOfText: number
+  ) => AddTextSettingResults
+  withSelections: (
+    selection: string,
+    textIsEmpty: boolean,
+    numLineBreaksBeforeSelection: number
+  ) => AddTextSettingResults
   selectionDeltaAfterChange?: number | ((selection: string) => number)
 }
 
@@ -34,6 +43,25 @@ interface FormattingControl {
   icon: IconDefinition
   tooltip: string
   settings: AddTextSettings
+}
+
+function withLineBreaks(
+  code: string,
+  desiredNumber: number,
+  textIsEmpty: boolean,
+  numLineBreaksBeforeSelection: number
+) {
+  if (textIsEmpty) {
+    return code
+  }
+  const numToAdd = desiredNumber - numLineBreaksBeforeSelection
+  if (numToAdd <= 0) {
+    return code
+  }
+  const linebreaks = Array.from({ length: numToAdd })
+    .map(() => '\n')
+    .join('')
+  return `${linebreaks}${code}`
 }
 
 /** null = spacer */
@@ -101,7 +129,7 @@ export const CONTROLS: (FormattingControl | null)[] = [
         }
       },
       withSelections: (selection: string) => `~~${selection}~~`,
-      selectionDeltaAfterChange: 1,
+      selectionDeltaAfterChange: 2,
     },
   },
   null,
@@ -118,9 +146,18 @@ export const CONTROLS: (FormattingControl | null)[] = [
           selectionRangeEnd: length - 1,
         }
       },
-      withSelections: (selection: string) =>
+      withSelections: (
+        selection: string,
+        textIsEmpty: boolean,
+        numLineBreaksBeforeSelection: number
+      ) =>
         containsLinebreaks(selection)
-          ? '```\n' + selection + '`\n``'
+          ? withLineBreaks(
+              '```js\n' + selection + '\n```\n\n',
+              2,
+              textIsEmpty,
+              numLineBreaksBeforeSelection
+            )
           : `\`${selection}\``,
       selectionDeltaAfterChange: (selection: string) =>
         containsLinebreaks(selection) ? 3 : 1,
@@ -134,11 +171,19 @@ export const CONTROLS: (FormattingControl | null)[] = [
       withSelections: (selection: string) => {
         if (containsLinebreaks(selection)) {
           const lines = selection.split('\n')
-          return lines.map((line) => `> ${line}  `).join('\n')
+          return {
+            value: lines.map((line) => `> ${line}  `).join('\n'),
+            selectionRangeStart: 0,
+            selectionRangeEnd: 0,
+          }
         }
-        return `> ${selection}`
+        const newValue = `> ${selection}`
+        return {
+          value: newValue,
+          selectionRangeStart: 2,
+          selectionRangeEnd: newValue.length,
+        }
       },
-      selectionDeltaAfterChange: 2,
     },
   },
   {
@@ -178,8 +223,7 @@ export const CONTROLS: (FormattingControl | null)[] = [
     tooltip: 'Image',
     settings: {
       noSelections: (fullText: string) => {
-        const code = '![](url)'
-        const newValue = fullText ? `${fullText}\n\n${code}` : code
+        const newValue = `${fullText}![](url)`
         const length = newValue.length
         return {
           value: newValue,
@@ -221,13 +265,31 @@ export const CONTROLS: (FormattingControl | null)[] = [
           selectionRangeEnd: length,
         }
       },
-      withSelections: (selection: string) => {
+      withSelections: (
+        selection: string,
+        textIsEmpty: boolean,
+        numLineBreaksBeforeSelection: number
+      ) => {
         if (containsLinebreaks(selection)) {
           const lines = selection.split('\n')
           const newLines = lines.map((line) => `- ${line}`).join('\n')
-          return `\n\n${newLines}`
+          const newValue = withLineBreaks(
+            newLines,
+            2,
+            textIsEmpty,
+            numLineBreaksBeforeSelection
+          )
+          return {
+            value: newValue,
+            selectionRangeStart: 0,
+            selectionRangeEnd: newValue.length,
+          }
         }
-        return `\n\n- ${selection}`
+        return {
+          value: `- ${selection}`,
+          selectionRangeStart: 2,
+          selectionRangeEnd: selection.length + 2,
+        }
       },
     },
   },
@@ -245,13 +307,28 @@ export const CONTROLS: (FormattingControl | null)[] = [
           selectionRangeEnd: length,
         }
       },
-      withSelections: (selection: string) => {
+      withSelections: (
+        selection: string,
+        textIsEmpty: boolean,
+        numLineBreaksBeforeSelection: number
+      ) => {
+        let newValue = `1. ${selection}`
         if (containsLinebreaks(selection)) {
           const lines = selection.split('\n')
           const newLines = lines.map((line, i) => `${i + 1}. ${line}`).join('\n')
-          return `\n\n${newLines}`
+          newValue = newLines
         }
-        return `\n\n1. ${selection}`
+        const finalNewValue = withLineBreaks(
+          newValue,
+          2,
+          textIsEmpty,
+          numLineBreaksBeforeSelection
+        )
+        return {
+          value: finalNewValue,
+          selectionRangeStart: 0,
+          selectionRangeEnd: finalNewValue.length,
+        }
       },
     },
   },
@@ -269,14 +346,59 @@ export const CONTROLS: (FormattingControl | null)[] = [
           selectionRangeEnd: length,
         }
       },
-      withSelections: (selection: string) => {
+      withSelections: (
+        selection: string,
+        textIsEmpty: boolean,
+        numLineBreaksBeforeSelection: number
+      ) => {
         if (containsLinebreaks(selection)) {
           const lines = selection.split('\n')
           const newLines = lines.map((line) => `* [ ] ${line}`).join('\n')
-          return `\n\n${newLines}`
+          return withLineBreaks(newLines, 2, textIsEmpty, numLineBreaksBeforeSelection)
         }
         return `* [ ] ${selection}`
       },
     },
   },
+  {
+    icon: faTable,
+    tooltip: 'Table',
+    settings: {
+      noSelections: (
+        fullText: string,
+        textIsEmpty: boolean,
+        numLineBreaksAtEndOfText: number
+      ) => {
+        const code = withLineBreaks(TABLE_CODE, 2, textIsEmpty, numLineBreaksAtEndOfText)
+        return `${fullText}${code}`
+      },
+      withSelections: (
+        selection: string,
+        textIsEmpty: boolean,
+        numLineBreaksBeforeSelection: number
+      ) => {
+        const code = withLineBreaks(
+          TABLE_CODE,
+          2,
+          textIsEmpty,
+          numLineBreaksBeforeSelection
+        )
+        return `${selection}${code}`
+      },
+    },
+  },
 ]
+
+const TABLE_CODE = `| Center Aligned | Left Aligned | Right Aligned |
+| -------------- | :----------- | -------------: |
+| Row 1          |              |                |
+| Row 2          | Code does not need good spacing! | |`
+
+export function getNumLinebreaksAtEnd(text: string) {
+  let numLinebreaksAtEnd = 0
+  for (let i = text.length - 1; i >= 0; i--) {
+    if (text[i] === '\n') numLinebreaksAtEnd++
+    else break
+  }
+  return numLinebreaksAtEnd
+}

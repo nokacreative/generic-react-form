@@ -34,8 +34,14 @@ export function Textarea(props: Props) {
 
   const { onChange: customOnChange, ...miscHtmlProps } = props.htmlProps || {}
 
-  const { formattingControlsJsx, markdownPreviewArea, value, textareaRef, onChange } =
-    useMarkdown(!!props.useMarkdown, props.defaultValue, customOnChange)
+  const {
+    formattingControlsJsx,
+    markdownPreviewArea,
+    value,
+    textareaRef,
+    onChange,
+    onKeyPress,
+  } = useMarkdown(!!props.useMarkdown, props.defaultValue, customOnChange)
 
   return (
     <div className={`${NOKA_COLORS_CLASS} textarea-wrapper`}>
@@ -48,6 +54,7 @@ export function Textarea(props: Props) {
         className={classNames.join(' ')}
         value={value}
         ref={textareaRef}
+        onKeyPress={onKeyPress}
       />
       {props.characterLimit && (
         <span className="characterLimit-label">

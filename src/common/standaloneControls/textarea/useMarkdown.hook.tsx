@@ -1,10 +1,15 @@
-import { ChangeEvent, ChangeEventHandler, useMemo, useState } from 'react'
+import React, { ChangeEvent, ChangeEventHandler, useMemo, useState } from 'react'
 
 import { Icon } from '../../icon'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
-import { AddTextSettingResults, AddTextSettings, CONTROLS } from './utils'
+import {
+  AddTextSettingResults,
+  AddTextSettings,
+  CONTROLS,
+  getNumLinebreaksAtEnd,
+} from './utils'
 import { MarkdownRenderer } from '../../markdownRenderer'
 
 export function useMarkdown(
@@ -67,11 +72,11 @@ export function useMarkdown(
           end: ref.current.selectionEnd,
         }
         const selection = currentSelection.current
-        function getResult(result: AddTextSettingResults) {
+        function getResult(result: AddTextSettingResults, selectionOffset: number) {
           if (typeof result === 'object') {
             currentSelection.current = {
-              start: result.selectionRangeStart,
-              end: result.selectionRangeEnd,
+              start: selectionOffset + result.selectionRangeStart,
+              end: selectionOffset + result.selectionRangeEnd,
             }
             return result.value
           }
@@ -79,7 +84,16 @@ export function useMarkdown(
         }
         if (selection.start === selection.end) {
           currentSelectionDeltaAfterChange.current = 0
-          setValue((value) => getResult(settings.noSelections(value)))
+          setValue((value) =>
+            getResult(
+              settings.noSelections(
+                value,
+                value.length === 0,
+                getNumLinebreaksAtEnd(value)
+              ),
+              0
+            )
+          )
         } else {
           setValue((value) => {
             const parts = {
@@ -91,7 +105,14 @@ export function useMarkdown(
               typeof settings.selectionDeltaAfterChange === 'function'
                 ? settings.selectionDeltaAfterChange(parts.selection)
                 : settings.selectionDeltaAfterChange || 0
-            const result = getResult(settings.withSelections(parts.selection))
+            const result = getResult(
+              settings.withSelections(
+                parts.selection,
+                parts.start.length === 0,
+                getNumLinebreaksAtEnd(parts.start)
+              ),
+              parts.start.length
+            )
             return `${parts.start}${result}${parts.end}`
           })
         }
@@ -117,6 +138,59 @@ export function useMarkdown(
 
   const previewArea = useMemo(() => <MarkdownRenderer value={value} />, [value])
 
+  const CODE = {
+    bullet: '- ',
+    ol: /^[0-9]+\. /,
+    task: '* [ ] ',
+    checkedTask: '* [ ] ',
+  }
+  const LIST_ITEM_CODE = Object.values(CODE).filter(
+    (c) => typeof c === 'string'
+  ) as string[]
+
+  /** @returns true if setValue was called, false otherwise. */
+  function setValueBasedOnLastLine(
+    lastLine: string,
+    previousLines: string,
+    codeToCheckFor: string
+  ) {
+    if (lastLine === codeToCheckFor) {
+      setValue(`${previousLines}\n`)
+      return true
+    } else if (lastLine.startsWith(codeToCheckFor)) {
+      setValue((value) => `${value}\n${codeToCheckFor}`)
+      return true
+    }
+    return false
+  }
+
+  function onKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (ref.current && e.key === 'Enter') {
+      e.preventDefault()
+      e.stopPropagation()
+      const lines = ref.current.value.split('\n')
+      const lastLine = lines[lines.length - 1]
+      const previousLines = lines.slice(0, -1).join('\n')
+      const areValuesSet = LIST_ITEM_CODE.some((c) =>
+        setValueBasedOnLastLine(lastLine, previousLines, c)
+      )
+      if (!areValuesSet) {
+        const startsWithOl = CODE.ol.exec(lastLine)
+        if (startsWithOl) {
+          const prefix = startsWithOl[0]
+          if (lastLine === prefix) {
+            setValue(`${previousLines}\n`)
+          } else {
+            const nextNumber = parseInt(prefix.slice(0, -2)) + 1
+            setValue((value) => `${value}\n${nextNumber}. `)
+          }
+        } else {
+          setValue((value) => `${value}\n`)
+        }
+      }
+    }
+  }
+
   return {
     formattingControlsJsx: jsx,
     value,
@@ -128,5 +202,6 @@ export function useMarkdown(
       }
     },
     markdownPreviewArea: previewArea,
+    onKeyPress,
   }
 }
