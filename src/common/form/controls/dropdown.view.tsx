@@ -40,7 +40,11 @@ export function FormDropdown<T>(
         }
         if (props.isMultiple && props.saveSelection !== false) {
           const values = options?.map((o) => o.value)
-          props.saveValueToState(props.propertyPath, values)
+          if (props.defaultValue !== undefined && values === undefined) {
+            props.saveValueToState(props.propertyPath, [])
+          } else {
+            props.saveValueToState(props.propertyPath, values)
+          }
           if (props.validateOnChange) props.validate(values)
           latestValues.current = values
         }
