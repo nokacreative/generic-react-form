@@ -77,9 +77,11 @@ export function Dropdown(props: Props) {
     }
   }, [selectedOptions])
 
-  function selectOption(option: DropdownOption | undefined) {
+  function selectOption(option: DropdownOption | DropdownOption[] | undefined) {
     if (option === undefined) {
       setSelectedOptions(undefined)
+    } else if (Array.isArray(option)) {
+      setSelectedOptions(option)
     } else {
       if (props.saveSelection !== false) {
         setSelectedOptions([option])
@@ -106,7 +108,11 @@ export function Dropdown(props: Props) {
         }
       }
     }
-    if ((props.showClearButton || option !== undefined) && props.onOptionSelected) {
+    if (
+      (props.showClearButton || option !== undefined) &&
+      props.onOptionSelected &&
+      !Array.isArray(option)
+    ) {
       props.onOptionSelected(option)
     }
     setFilter(undefined)
@@ -138,11 +144,21 @@ export function Dropdown(props: Props) {
     prevConfigOptions.current = configOptions
 
     // Select default option in new options list
-    const option = configOptions.find((o) => o.value === props.defaultValue)
-    if (option !== undefined) {
-      selectOption(option)
-      return
+    if (props.isMultiple) {
+      const defaultValues = props.defaultValue as any[]
+      const options = configOptions.filter((o) => defaultValues.includes(o.value))
+      if (options !== undefined) {
+        selectOption(options)
+        return
+      }
+    } else {
+      const option = configOptions.find((o) => o.value === props.defaultValue)
+      if (option !== undefined) {
+        selectOption(option)
+        return
+      }
     }
+
     selectOption(undefined)
   }, [configOptions])
 

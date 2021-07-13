@@ -7,16 +7,18 @@
   align-items: center;
 
   span {
-    padding: 1em;
-    line-height: 1rem;
+    padding: 1.3em 1em;
+    line-height: 1em;
+    margin-left: 4em;
   }
 
   .icon {
     height: 100%;
-    padding: 1em 1.8em;
+    width: 3.5em;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
 
     svg {
       width: 1.5em;
