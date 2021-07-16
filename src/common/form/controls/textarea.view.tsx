@@ -19,18 +19,21 @@ export function FormTextarea<T>(
         'aria-label': props.label,
         'aria-invalid': props.hasError,
         className: (props.characterLimit || 0) > 300 ? 'long' : '',
-        disabled: props.isDisabled,
         onChange: props.validateOnChange
-          ? (e) => props.validate(e.target.value)
+          ? (e: React.ChangeEvent<HTMLTextAreaElement>) => props.validate(e.target.value)
           : undefined,
-        onBlur: (e) => {
+        onBlur: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
           const value = e.target.value
           props.saveValueToState(props.propertyPath, value)
           if (props.validateOnBlur) props.validate(value)
         },
         placeholder: props.placeholder,
       }}
+      isDisabled={props.isDisabled}
       useMarkdown={props.useMarkdown}
+      allowImageUpload={props.allowImageUpload}
+      imageUploaderProperties={props.imageUploaderProperties}
+      messageOverrides={props.messageOverrides}
     />
   )
 }

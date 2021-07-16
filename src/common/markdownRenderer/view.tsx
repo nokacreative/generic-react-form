@@ -1,4 +1,4 @@
-import ReactMarkdown, { ReactMarkdownOptions } from 'react-markdown'
+import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 import toc from 'remark-toc'
 // @ts-expect-error
@@ -6,10 +6,9 @@ import rehypeHighlight from 'rehype-highlight'
 
 import './styles.scss'
 import { Checkbox } from '../standaloneControls'
+import { MarkdownRendererOptions } from './models'
 
-type Options = Omit<ReactMarkdownOptions, 'children'>
-
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: MarkdownRendererOptions = {
   remarkPlugins: [gfm, toc],
   rehypePlugins: [[rehypeHighlight, { ignoreMissing: true }]],
   components: {
@@ -41,13 +40,14 @@ const DEFAULT_OPTIONS: Options = {
         </a>
       )
     },
+    img: (props: any) => <img src={props.src || ''} alt={props.alt} />,
   },
   className: 'noka-markdown-renderer',
 }
 
 type Props = {
   value: string
-  options?: (defaultOptions: Options) => Options
+  options?: (defaultOptions: MarkdownRendererOptions) => MarkdownRendererOptions
 }
 
 export const MarkdownRenderer = ({ value, options }: Props) => (

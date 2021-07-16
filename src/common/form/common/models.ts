@@ -1,4 +1,5 @@
 import React from 'react'
+import { TextareaProps } from '../../standaloneControls'
 
 import { DateInputProps } from '../../standaloneControls/date'
 import { DropdownOption, DropdownProps } from '../../standaloneControls/dropdown'
@@ -96,13 +97,9 @@ export interface CheckboxGroupControlConfig extends BaseRadioOrCheckboxGroupConf
   maxNumSelections?: number
 }
 
-export interface TextareaControlConfig {
+export type TextareaControlConfig = Omit<TextareaProps, 'isDisabled' | 'defaultValue'> & {
   type: FormControlType.TEXTAREA
-  characterLimit?: number
-  allowHorizontalResize?: boolean
-  allowVerticalResize?: boolean
   placeholder?: string
-  useMarkdown?: boolean
 }
 
 export type AttachmentControlConfig = Omit<

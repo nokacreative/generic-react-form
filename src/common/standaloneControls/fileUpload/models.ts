@@ -3,8 +3,8 @@ import { FileUploadStatus } from './enums'
 
 export type Props = {
   supportedFileExtensions?: string[]
-  onUpload: (files: File[]) => void
-  onRemove: (filename: string, index: number) => void
+  onUpload?: (files: File[]) => void
+  onRemove?: (filename: string, index: number) => void
   fileUploadProgress?: { [filename: string]: number }
   fileStatuses?: { [filename: string]: FileUploadStatus }
   isMultiple?: boolean
@@ -33,4 +33,6 @@ export type Props = {
   isDisabled?: boolean
   defaultValue?: FileList | File | string | null
   inputName?: string
+  onListedFileSelected?: (file: File, isDeselected: boolean) => void
+  persistListedFileSelections?: boolean
 }

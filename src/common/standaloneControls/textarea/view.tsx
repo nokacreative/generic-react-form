@@ -1,23 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { faImage } from '@fortawesome/free-regular-svg-icons'
 import './styles.scss'
 
 import { NOKA_COLORS_CLASS } from '../../../assets/constants'
 import { useMarkdown } from './useMarkdown.hook'
-
-export type Props = {
-  characterLimit?: number
-  allowHorizontalResize?: boolean
-  allowVerticalResize?: boolean
-  useMarkdown?: boolean
-  htmlProps?: Omit<
-    React.DetailedHTMLProps<
-      React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-      HTMLTextAreaElement
-    >,
-    'maxLength' | 'defaultValue'
-  >
-  defaultValue?: string
-}
+import { FileUploader } from '../fileUpload'
+import { Modal } from '../../modal'
+import { Input, InputType } from '../input'
+import { Props } from './props'
+import { useEffect } from 'react'
 
 export function Textarea(props: Props) {
   const classNames = []
@@ -34,6 +25,8 @@ export function Textarea(props: Props) {
 
   const { onChange: customOnChange, ...miscHtmlProps } = props.htmlProps || {}
 
+  const [showImageUploader, setShowImageUploader] = useState<boolean>(false)
+
   const {
     formattingControlsJsx,
     markdownPreviewArea,
@@ -41,7 +34,23 @@ export function Textarea(props: Props) {
     textareaRef,
     onChange,
     onKeyPress,
-  } = useMarkdown(!!props.useMarkdown, props.defaultValue, customOnChange)
+    onUploadedImageSelected,
+    onImageUpload,
+    onImageRemove,
+  } = useMarkdown(
+    !!props.useMarkdown,
+    props.defaultValue,
+    customOnChange,
+    !!props.allowImageUpload,
+    setShowImageUploader,
+    props.isDisabled
+  )
+
+  useEffect(() => {
+    if (props.isDisabled && showImageUploader) {
+      setShowImageUploader(false)
+    }
+  }, [props.isDisabled])
 
   return (
     <div className={`${NOKA_COLORS_CLASS} textarea-wrapper`}>
@@ -55,13 +64,42 @@ export function Textarea(props: Props) {
         value={value}
         ref={textareaRef}
         onKeyPress={onKeyPress}
+        disabled={props.isDisabled}
       />
       {props.characterLimit && (
         <span className="characterLimit-label">
-          Character Limit: {props.characterLimit}
+          {props.messageOverrides?.characterLimitLabel || 'Character Limit'}:{' '}
+          {props.characterLimit}
         </span>
       )}
       {markdownPreviewArea}
+      {showImageUploader && (
+        <Modal
+          setOpen={setShowImageUploader}
+          icon={faImage}
+          headerText={props.messageOverrides?.uploadImageModalHeader || 'Upload Image'}
+          className="textarea-image-upload-modal"
+          width={600}
+        >
+          <div className="instructions">
+            {props.messageOverrides?.imageUploadModalInstructions ||
+              'Click on an uploaded image to add it.'}
+          </div>
+          <FileUploader
+            supportedFileExtensions={['.jpg', '.jpeg', '.png']}
+            {...(props.imageUploaderProperties || {})}
+            onListedFileSelected={onUploadedImageSelected}
+            onUpload={onImageUpload}
+            onRemove={onImageRemove}
+          />
+          <div className="input-section">
+            <label>
+              {props.messageOverrides?.enterImageUrlLabel || 'Or, enter an image URL:'}
+            </label>
+            <Input type={InputType.TEXT} htmlProps={{ placeholder: 'https://...' }} />
+          </div>
+        </Modal>
+      )}
     </div>
   )
 }

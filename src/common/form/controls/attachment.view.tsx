@@ -19,7 +19,7 @@ export function FormAttachmentControl<T>(
       defaultValue={props.defaultValue}
       supportedFileExtensions={props.supportedFileExtensions}
       onUpload={(files: File[]) => {
-        props.onUpload(files)
+        if (props.onUpload) props.onUpload(files)
         if (props.isMultiple) {
           props.saveValueToState(
             props.propertyPath,
@@ -35,7 +35,7 @@ export function FormAttachmentControl<T>(
         if (shouldValidate) props.validate(null)
       }}
       onRemove={(filename: string, index: number) => {
-        props.onRemove(filename, index)
+        if (props.onRemove) props.onRemove(filename, index)
         if (props.isMultiple) {
           props.saveValueToState(
             props.propertyPath,

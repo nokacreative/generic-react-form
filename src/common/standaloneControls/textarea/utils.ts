@@ -64,6 +64,8 @@ function withLineBreaks(
   return `${linebreaks}${code}`
 }
 
+export const IMAGE_CONTROL_INDEX = 8
+
 /** null = spacer */
 export const CONTROLS: (FormattingControl | null)[] = [
   {
@@ -402,3 +404,25 @@ export function getNumLinebreaksAtEnd(text: string) {
   }
   return numLinebreaksAtEnd
 }
+
+export const UPLOADED_IMAGE_PREFIX = 'uploaded:'
+export const ADD_UPLOADED_IMAGE_SETTINGS = (filename: string): AddTextSettings => ({
+  noSelections: (fullText: string) => {
+    const newValue = `${fullText}![${filename}](${UPLOADED_IMAGE_PREFIX}${filename})`
+    const length = newValue.length
+    return {
+      value: newValue,
+      selectionRangeStart: length - 4,
+      selectionRangeEnd: length - 1,
+    }
+  },
+  withSelections: (selection: string) => {
+    const newValue = `[${selection}](${UPLOADED_IMAGE_PREFIX}${filename})`
+    const length = newValue.length
+    return {
+      value: newValue,
+      selectionRangeStart: length - 4,
+      selectionRangeEnd: length - 1,
+    }
+  },
+})

@@ -14,6 +14,7 @@ export function FileUploader(props: Props) {
   const [isDraggingOver, setDraggingOver] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>()
   const [fileSizeMsg, setFileSizeMsg] = useState<string>('')
+  const [selectedListedFileIndices, setSelectedListedFileIndices] = useState<number[]>([])
 
   useEffect(() => {
     if (typeof props.defaultValue === 'string') {
@@ -71,7 +72,7 @@ export function FileUploader(props: Props) {
   }
 
   function removeFile(file: File, index: number) {
-    props.onRemove(file.name, index)
+    if (props.onRemove) props.onRemove(file.name, index)
     if (files) {
       const removalIndex = files.findIndex((f) => f.name === file.name)
       const newFiles = [...files.slice(0, removalIndex), ...files.slice(removalIndex + 1)]
@@ -119,7 +120,7 @@ export function FileUploader(props: Props) {
       }
     }
     setErrorMessage(undefined)
-    props.onUpload(newFiles)
+    if (props.onUpload) props.onUpload(newFiles)
     if (props.isMultiple) {
       if (newFiles.length > 0) {
         setFiles([...(files || []), ...newFiles])
@@ -130,7 +131,9 @@ export function FileUploader(props: Props) {
   }
 
   function retryUpload(file: File) {
-    props.onUpload([file])
+    if (props.onUpload) {
+      props.onUpload([file])
+    }
   }
 
   const dropZoneClasses = React.useMemo(() => {
@@ -165,8 +168,40 @@ export function FileUploader(props: Props) {
               : props.fileUploadProgress
               ? `${props.fileUploadProgress[file.name]}%`
               : 0
+            const isSelected = selectedListedFileIndices.includes(i)
+            const classNames = ['file']
+            if (uploadHasFailed) {
+              classNames.push('error')
+            }
+            if (props.onListedFileSelected) {
+              classNames.push('clickable')
+            }
+            if (props.persistListedFileSelections && isSelected) {
+              classNames.push('selected')
+            }
             return (
-              <div className={`file ${uploadHasFailed ? 'error' : ''}`} key={`file_${i}`}>
+              <div
+                className={classNames.join(' ')}
+                key={`file_${i}`}
+                onClick={() => {
+                  if (props.onListedFileSelected) {
+                    if (props.persistListedFileSelections) {
+                      if (isSelected) {
+                        const indexToRemove = selectedListedFileIndices.findIndex(
+                          (x) => x === i
+                        )
+                        setSelectedListedFileIndices([
+                          ...selectedListedFileIndices.slice(0, indexToRemove),
+                          ...selectedListedFileIndices.slice(indexToRemove + 1),
+                        ])
+                      } else {
+                        setSelectedListedFileIndices([...selectedListedFileIndices, i])
+                      }
+                    }
+                    props.onListedFileSelected(file, isSelected)
+                  }
+                }}
+              >
                 <div className="file-info">
                   <Icon icon={getIcon(file.name)} size="2x" extraClassName="file-icon" />
                   <div className="main">

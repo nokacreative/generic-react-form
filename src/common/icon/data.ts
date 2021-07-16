@@ -40,6 +40,7 @@ export const GeneralIcons = {
   Info: faInfoCircle,
   Visible: faEye,
   Hidden: faEyeSlash,
+  Close: faTimes,
 }
 
 export const FileIcons = {

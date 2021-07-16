@@ -39,6 +39,22 @@
       display: inline-block;
       width: 2rem;
     }
+
+    &.disabled {
+      .icon {
+        color: var(--disabledControlText);
+      }
+    }
+  }
+
+  .textarea-image-upload-modal {
+    .instructions {
+      margin-bottom: 1rem;
+    }
+
+    .input-section {
+      margin-top: 1rem;
+    }
   }
 }
 

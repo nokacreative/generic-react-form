@@ -103,6 +103,14 @@
       }
     }
 
+    &.clickable {
+      cursor: pointer;
+    }
+
+    &.selected {
+      border-color: var(--active);
+    }
+
     &:not(:last-child) {
       margin-bottom: 5px;
     }

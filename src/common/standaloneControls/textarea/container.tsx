@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { withReadOnlySwitch } from '../readonly'
-import { Textarea, Props } from './view'
+import { Props } from './props'
+import { Textarea } from './view'
 
 export const TextareaContainer = withReadOnlySwitch<Props>(
   (props) => <Textarea {...props} />,
