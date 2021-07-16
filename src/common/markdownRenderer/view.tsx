@@ -34,6 +34,13 @@ const DEFAULT_OPTIONS: Options = {
       }
       return <li {...props} />
     },
+    a: (props: any) => {
+      return (
+        <a href={props.href} target="_blank" rel="noreferrer">
+          {props.children ? props.children[0] : props.href || '(link)'}
+        </a>
+      )
+    },
   },
   className: 'noka-markdown-renderer',
 }

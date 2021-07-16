@@ -88,6 +88,9 @@ export function FileUploader(props: Props) {
 
   function startUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const newFiles = Array.from(event.target.files || [])
+    if (newFiles.length === 0) {
+      return
+    }
     if (
       props.individualFileSizeLimit &&
       newFiles.some((f) => f.size > (props.individualFileSizeLimit as number))
@@ -122,11 +125,7 @@ export function FileUploader(props: Props) {
         setFiles([...(files || []), ...newFiles])
       }
     } else {
-      if (newFiles.length === 0) {
-        setFiles(undefined)
-      } else {
-        setFiles(newFiles)
-      }
+      setFiles(newFiles)
     }
   }
 
