@@ -1,5 +1,18 @@
 import { FileUploaderProps } from '../fileUpload'
 
+export type ImageUploadModalMessageOverrides = {
+  header?: string
+  instructions?: React.ReactNode
+  enterImageUrlLabel?: string
+  enterImageUrlPlaceholder?: string
+  addButtonLabel?: string
+}
+
+export type TextareaImageUploaderProps = Omit<
+  FileUploaderProps,
+  'onListedFileSelected' | 'persistListedFileSelections'
+>
+
 export type Props = {
   characterLimit?: number
   allowHorizontalResize?: boolean
@@ -17,14 +30,9 @@ export type Props = {
   /** For the 'image' control if useMarkdown is true */
   allowImageUpload?: boolean
   /** For the dialog launched by the 'image' control if useMarkdown is true */
-  imageUploaderProperties?: Omit<
-    FileUploaderProps,
-    'onListedFileSelected' | 'persistListedFileSelections'
-  >
+  imageUploaderProperties?: TextareaImageUploaderProps
   messageOverrides?: {
     characterLimitLabel?: string
-    uploadImageModalHeader?: string
-    enterImageUrlLabel?: string
-    imageUploadModalInstructions?: React.ReactNode
+    imageUploadModal?: ImageUploadModalMessageOverrides
   }
 }

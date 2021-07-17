@@ -25,6 +25,14 @@ export function FileUploader(props: Props) {
       setFiles(Array.from(props.defaultValue))
     } else if (props.defaultValue == null) {
       setFiles(undefined)
+    } else if (Array.isArray(props.defaultValue)) {
+      if (typeof props.defaultValue[0] === 'string') {
+        setFiles(
+          (props.defaultValue as string[]).map((filename) => new File([], filename))
+        )
+      } else if (props.defaultValue[0] instanceof File) {
+        setFiles(props.defaultValue as File[])
+      }
     }
   }, [props.defaultValue])
 

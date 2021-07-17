@@ -1,14 +1,8 @@
-import React, { useState } from 'react'
-import { faImage } from '@fortawesome/free-regular-svg-icons'
 import './styles.scss'
 
 import { NOKA_COLORS_CLASS } from '../../../assets/constants'
-import { useMarkdown } from './useMarkdown.hook'
-import { FileUploader } from '../fileUpload'
-import { Modal } from '../../modal'
-import { Input, InputType } from '../input'
+import { useMarkdown } from './useMarkdown'
 import { Props } from './props'
-import { useEffect } from 'react'
 
 export function Textarea(props: Props) {
   const classNames = []
@@ -25,8 +19,6 @@ export function Textarea(props: Props) {
 
   const { onChange: customOnChange, ...miscHtmlProps } = props.htmlProps || {}
 
-  const [showImageUploader, setShowImageUploader] = useState<boolean>(false)
-
   const {
     formattingControlsJsx,
     markdownPreviewArea,
@@ -34,29 +26,16 @@ export function Textarea(props: Props) {
     textareaRef,
     onChange,
     onKeyPress,
-    onUploadedImageSelected,
-    onImageUpload,
-    onImageRemove,
+    imageUploadModal,
   } = useMarkdown(
     !!props.useMarkdown,
     props.defaultValue,
     customOnChange,
     !!props.allowImageUpload,
-    setShowImageUploader,
-    props.isDisabled
+    props.isDisabled,
+    props.imageUploaderProperties,
+    props.messageOverrides?.imageUploadModal
   )
-
-  useEffect(() => {
-    if (props.isDisabled && showImageUploader) {
-      setShowImageUploader(false)
-    }
-  }, [props.isDisabled])
-
-  const {
-    onUpload: customOnImageUpload,
-    onRemove: customOnImageRemove,
-    ...customImageUploaderProperties
-  } = props.imageUploaderProperties || {}
 
   return (
     <div className={`${NOKA_COLORS_CLASS} textarea-wrapper`}>
@@ -78,48 +57,8 @@ export function Textarea(props: Props) {
           {props.characterLimit}
         </span>
       )}
+      {imageUploadModal}
       {markdownPreviewArea}
-      {showImageUploader && (
-        <Modal
-          setOpen={setShowImageUploader}
-          icon={faImage}
-          headerText={props.messageOverrides?.uploadImageModalHeader || 'Upload Image'}
-          className="textarea-image-upload-modal"
-          width={600}
-        >
-          <div className="instructions">
-            {props.messageOverrides?.imageUploadModalInstructions ||
-              'Click on an uploaded image to add it.'}
-          </div>
-          <FileUploader
-            {...customImageUploaderProperties}
-            supportedFileExtensions={['.jpg', '.jpeg', '.png']}
-            onListedFileSelected={onUploadedImageSelected}
-            onUpload={(files: File[]) => {
-              if (customOnImageUpload) {
-                customOnImageUpload(files)
-              }
-              if (onImageUpload) {
-                onImageUpload(files)
-              }
-            }}
-            onRemove={(filename: string, index: number) => {
-              if (customOnImageRemove) {
-                customOnImageRemove(filename, index)
-              }
-              if (onImageRemove) {
-                onImageRemove(filename)
-              }
-            }}
-          />
-          <div className="input-section">
-            <label>
-              {props.messageOverrides?.enterImageUrlLabel || 'Or, enter an image URL:'}
-            </label>
-            <Input type={InputType.TEXT} htmlProps={{ placeholder: 'https://...' }} />
-          </div>
-        </Modal>
-      )}
     </div>
   )
 }

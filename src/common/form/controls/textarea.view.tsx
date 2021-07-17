@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { FileUploaderProps } from '../../standaloneControls'
-import { Textarea } from '../../standaloneControls/textarea'
+import { Textarea, TextareaImageUploaderProps } from '../../standaloneControls/textarea'
 import { TextareaControlConfig } from '../common/models'
 import { FormActionType } from '../main/enums'
 import { BaseFormControlProps, SpecificFormControlProps } from './models'
@@ -16,7 +15,7 @@ export function FormTextarea<T>(
     ...customImageUploaderProperties
   } = props.imageUploaderProperties || {}
 
-  const finalImageUploaderProperties: FileUploaderProps = {
+  const finalImageUploaderProperties: TextareaImageUploaderProps = {
     ...customImageUploaderProperties,
   }
   if (usesRichImageUpload) {

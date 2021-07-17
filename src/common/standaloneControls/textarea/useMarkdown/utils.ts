@@ -412,8 +412,8 @@ export const ADD_UPLOADED_IMAGE_SETTINGS = (filename: string): AddTextSettings =
     const length = newValue.length
     return {
       value: newValue,
-      selectionRangeStart: length - 4,
-      selectionRangeEnd: length - 1,
+      selectionRangeStart: length,
+      selectionRangeEnd: length,
     }
   },
   withSelections: (selection: string) => {
@@ -421,8 +421,8 @@ export const ADD_UPLOADED_IMAGE_SETTINGS = (filename: string): AddTextSettings =
     const length = newValue.length
     return {
       value: newValue,
-      selectionRangeStart: length - 4,
-      selectionRangeEnd: length - 1,
+      selectionRangeStart: length,
+      selectionRangeEnd: length,
     }
   },
 })

@@ -1,41 +1,50 @@
 import React, { ChangeEvent, ChangeEventHandler, useMemo, useState } from 'react'
 
-import { Icon } from '../../icon'
+import { Icon } from '../../../icon'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
 import {
   AddTextSettingResults,
   AddTextSettings,
-  ADD_UPLOADED_IMAGE_SETTINGS,
   CONTROLS,
   getNumLinebreaksAtEnd,
   IMAGE_CONTROL_INDEX,
   UPLOADED_IMAGE_PREFIX,
 } from './utils'
-import { MarkdownRenderer, MarkdownRendererOptions } from '../../markdownRenderer'
+import { MarkdownRenderer, MarkdownRendererOptions } from '../../../markdownRenderer'
+import { ImageUploadModalMessageOverrides, TextareaImageUploaderProps } from '../props'
+import { UploadedImage } from './models'
+import { ImageUploadModal } from './imageUploadModal'
 
 export function useMarkdown(
   use: boolean,
   defaultValue: string | undefined,
   customOnChange: ChangeEventHandler<HTMLTextAreaElement> | undefined,
   allowImageUpload: boolean,
-  setShowImageUploader: React.Dispatch<React.SetStateAction<boolean>>,
-  isDisabled?: boolean
+  isDisabled: boolean | undefined,
+  imageUploaderProperties: TextareaImageUploaderProps | undefined,
+  messageOverrides: ImageUploadModalMessageOverrides | undefined
 ) {
   const [value, setValue] = useState<string>('')
   const ref = useRef<HTMLTextAreaElement>(null)
   const currentSelection = useRef<{ start: number; end: number }>()
   const currentSelectionDeltaAfterChange = useRef(0)
-  const [uploadedImages, setUplodedImages] = useState<
-    { filename: string; data: string }[]
-  >([])
+  const [uploadedImages, setUplodedImages] = useState<UploadedImage[]>([])
+
+  const [showImageUploader, setShowImageUploader] = useState<boolean>(false)
 
   useEffect(() => {
     if (use) {
       setValue(defaultValue || '')
     }
   }, [defaultValue, use])
+
+  useEffect(() => {
+    if (isDisabled && showImageUploader) {
+      setShowImageUploader(false)
+    }
+  }, [isDisabled])
 
   const isFirstRun = useRef<boolean>(true)
   useEffect(() => {
@@ -167,11 +176,11 @@ export function useMarkdown(
             img: (props: any) => {
               if (props.src?.startsWith(UPLOADED_IMAGE_PREFIX)) {
                 const filename = props.src.replace(UPLOADED_IMAGE_PREFIX, '').trim()
-                const image = uploadedImages.find((x) => x.filename === filename)
+                const image = uploadedImages.find((x) => x.formattedFilename === filename)
                 if (!image) {
                   return 'Error retrieving the uploaded image!'
                 }
-                return <img src={image.data} alt={props.alt} />
+                return <img src={image.imageData} alt={props.alt} />
               }
               return <img src={props.src || ''} alt={props.alt} />
             },
@@ -235,39 +244,25 @@ export function useMarkdown(
     }
   }
 
-  function removeSpaces(text: string) {
-    return text.replace(/ /g, '')
-  }
-
-  async function onImageUpload(files: File[]) {
-    const newlyUploadedImages = await Promise.all(
-      files.map(async (file) => {
-        const buffer = await file.arrayBuffer()
-        const bytes = [].slice.call(new Uint8Array(buffer))
-        const binary = bytes.reduce((result, b) => (result += String.fromCharCode(b)), '')
-        const imageData = btoa(binary)
-        const imageDataStr = `data:${file.type};base64,${imageData}`
-        return {
-          filename: removeSpaces(file.name),
-          data: imageDataStr,
-        }
-      })
+  const imageUploadModal = React.useMemo(() => {
+    return (
+      <ImageUploadModal
+        show={showImageUploader}
+        setShowImageUploader={setShowImageUploader}
+        messageOverrides={messageOverrides}
+        imageUploaderProperties={imageUploaderProperties}
+        uploadedImages={uploadedImages}
+        setUplodedImages={setUplodedImages}
+        addText={addText}
+      />
     )
-    setUplodedImages([...uploadedImages, ...newlyUploadedImages])
-  }
-
-  function onImageRemove(filename: string) {
-    const fn = removeSpaces(filename)
-    const index = uploadedImages.findIndex((x) => x.filename === fn)
-    setUplodedImages([
-      ...uploadedImages.slice(0, index),
-      ...uploadedImages.slice(index + 1),
-    ])
-  }
-
-  function onUploadedImageSelected(file: File) {
-    addText(ADD_UPLOADED_IMAGE_SETTINGS(removeSpaces(file.name)))()
-  }
+  }, [
+    showImageUploader,
+    messageOverrides,
+    imageUploaderProperties,
+    uploadedImages,
+    addText,
+  ])
 
   return {
     formattingControlsJsx: jsx,
@@ -281,8 +276,6 @@ export function useMarkdown(
     },
     markdownPreviewArea: previewArea,
     onKeyPress,
-    onUploadedImageSelected,
-    onImageUpload,
-    onImageRemove,
+    imageUploadModal,
   }
 }

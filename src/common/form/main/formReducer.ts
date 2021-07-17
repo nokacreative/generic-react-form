@@ -34,11 +34,21 @@ export function createFormReducer<T extends object>() {
         }
       case FormActionType.ADD_ARRAY_VALUE: {
         const existingValue = (get(state.data, action.propertyPath) as any[]) || []
-        const newValue = action.allowDuplicates
-          ? [...existingValue, action.value]
-          : existingValue.includes(action.value)
-          ? existingValue
-          : [...existingValue, action.value]
+        const newValue = (() => {
+          const valueIsArray = Array.isArray(action.value)
+          if (!action.allowDuplicates) {
+            if (existingValue.includes(action.value)) {
+              return existingValue
+            }
+            if (valueIsArray && existingValue.some((v) => v === action.value)) {
+              return existingValue
+            }
+          }
+          if (valueIsArray) {
+            return [...existingValue, ...action.value]
+          }
+          return [...existingValue, action.value]
+        })()
         return {
           ...state,
           isDirty: true,

@@ -31,7 +31,7 @@ export type Props = {
   /** null = Remove icon */
   uploadIcon?: IconDefinition | null
   isDisabled?: boolean
-  defaultValue?: FileList | File | string | null
+  defaultValue?: FileList | File | File[] | string | string[] | null
   inputName?: string
   onListedFileSelected?: (file: File, isDeselected: boolean) => void
   persistListedFileSelections?: boolean
