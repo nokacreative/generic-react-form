@@ -52,6 +52,12 @@ export function Textarea(props: Props) {
     }
   }, [props.isDisabled])
 
+  const {
+    onUpload: customOnImageUpload,
+    onRemove: customOnImageRemove,
+    ...customImageUploaderProperties
+  } = props.imageUploaderProperties || {}
+
   return (
     <div className={`${NOKA_COLORS_CLASS} textarea-wrapper`}>
       {formattingControlsJsx}
@@ -86,11 +92,25 @@ export function Textarea(props: Props) {
               'Click on an uploaded image to add it.'}
           </div>
           <FileUploader
+            {...customImageUploaderProperties}
             supportedFileExtensions={['.jpg', '.jpeg', '.png']}
-            {...(props.imageUploaderProperties || {})}
             onListedFileSelected={onUploadedImageSelected}
-            onUpload={onImageUpload}
-            onRemove={onImageRemove}
+            onUpload={(files: File[]) => {
+              if (customOnImageUpload) {
+                customOnImageUpload(files)
+              }
+              if (onImageUpload) {
+                onImageUpload(files)
+              }
+            }}
+            onRemove={(filename: string, index: number) => {
+              if (customOnImageRemove) {
+                customOnImageRemove(filename, index)
+              }
+              if (onImageRemove) {
+                onImageRemove(filename)
+              }
+            }}
           />
           <div className="input-section">
             <label>

@@ -100,6 +100,10 @@ export interface CheckboxGroupControlConfig extends BaseRadioOrCheckboxGroupConf
 export type TextareaControlConfig = Omit<TextareaProps, 'isDisabled' | 'defaultValue'> & {
   type: FormControlType.TEXTAREA
   placeholder?: string
+  /** Only used when useMarkdown is true: save the uploaded images to the specified path. Defaults to <propertyPath_images>. */
+  uploadedImagesPropertyPath?: string
+  /** Only used when useMarkdown is true: saves the entire file to the state, as opposed to just its name. False by default. */
+  saveFullImageFile?: boolean
 }
 
 export type AttachmentControlConfig = Omit<
