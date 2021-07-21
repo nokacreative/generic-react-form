@@ -12,6 +12,7 @@ import {
   faTable,
 } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faImage } from '@fortawesome/free-regular-svg-icons'
+import { UPLOADED_IMAGE_PREFIX } from '../../../markdownRenderer'
 
 export type AddTextSettingResults =
   | string
@@ -242,7 +243,7 @@ export const CONTROLS: (FormattingControl | null)[] = [
             selectionRangeEnd: 6,
           }
         }
-        const newValue = `[${selection}](url)`
+        const newValue = `![${selection}](url)`
         const length = newValue.length
         return {
           value: newValue,
@@ -405,7 +406,6 @@ export function getNumLinebreaksAtEnd(text: string) {
   return numLinebreaksAtEnd
 }
 
-export const UPLOADED_IMAGE_PREFIX = 'uploaded:'
 export const ADD_UPLOADED_IMAGE_SETTINGS = (filename: string): AddTextSettings => ({
   noSelections: (fullText: string) => {
     const newValue = `${fullText}![${filename}](${UPLOADED_IMAGE_PREFIX}${filename})`
@@ -418,6 +418,27 @@ export const ADD_UPLOADED_IMAGE_SETTINGS = (filename: string): AddTextSettings =
   },
   withSelections: (selection: string) => {
     const newValue = `[${selection}](${UPLOADED_IMAGE_PREFIX}${filename})`
+    const length = newValue.length
+    return {
+      value: newValue,
+      selectionRangeStart: length,
+      selectionRangeEnd: length,
+    }
+  },
+})
+
+export const ADD_IMAGE_BY_URL_SETTINGS = (url: string) => ({
+  noSelections: (fullText: string) => {
+    const newValue = `${fullText}![](${url})`
+    const length = newValue.length
+    return {
+      value: newValue,
+      selectionRangeStart: length,
+      selectionRangeEnd: length,
+    }
+  },
+  withSelections: (selection: string) => {
+    const newValue = `![${selection}](${url})`
     const length = newValue.length
     return {
       value: newValue,

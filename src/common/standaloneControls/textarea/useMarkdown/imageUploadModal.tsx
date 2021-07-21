@@ -6,14 +6,15 @@ import { Modal } from '../../../modal'
 import { Input, InputType } from '../../input'
 import { ImageUploadModalMessageOverrides, TextareaImageUploaderProps } from '../props'
 import { UploadedImage } from './models'
-import { AddTextSettings, ADD_UPLOADED_IMAGE_SETTINGS, CONTROLS } from './utils'
-
-function removeSpaces(text: string) {
-  return text.replace(/ /g, '')
-}
-
-const ADD_IMAGE_BY_URL_SETTINGS = CONTROLS.find((c) => c?.tooltip === 'Image')
-  ?.settings as AddTextSettings
+import {
+  AddTextSettings,
+  ADD_IMAGE_BY_URL_SETTINGS,
+  ADD_UPLOADED_IMAGE_SETTINGS,
+} from './utils'
+import {
+  formatFilenameForMarkdownRenderer,
+  formatImageDataString,
+} from '../../../markdownRenderer'
 
 type Props = {
   show: boolean
@@ -26,8 +27,7 @@ type Props = {
 }
 
 export const ImageUploadModal = (props: Props) => {
-  const [showImageUploaderAddButton, setShowImageUploaderAddButton] =
-    useState<boolean>(false)
+  const [imageUploaderUrl, setImageUploaderUrl] = useState<string>()
 
   if (!props.show) {
     return null
@@ -46,9 +46,9 @@ export const ImageUploadModal = (props: Props) => {
         const bytes = [].slice.call(new Uint8Array(buffer))
         const binary = bytes.reduce((result, b) => (result += String.fromCharCode(b)), '')
         const imageData = btoa(binary)
-        const imageDataStr = `data:${file.type};base64,${imageData}`
+        const imageDataStr = formatImageDataString(file.type, imageData)
         return {
-          formattedFilename: removeSpaces(file.name),
+          formattedFilename: formatFilenameForMarkdownRenderer(file.name),
           imageData: imageDataStr,
           fileObject: file,
         }
@@ -58,7 +58,7 @@ export const ImageUploadModal = (props: Props) => {
   }
 
   function onImageRemove(filename: string) {
-    const fn = removeSpaces(filename)
+    const fn = formatFilenameForMarkdownRenderer(filename)
     const index = props.uploadedImages.findIndex((x) => x.formattedFilename === fn)
     props.setUplodedImages([
       ...props.uploadedImages.slice(0, index),
@@ -67,7 +67,9 @@ export const ImageUploadModal = (props: Props) => {
   }
 
   function onUploadedImageSelected(file: File) {
-    props.addText(ADD_UPLOADED_IMAGE_SETTINGS(removeSpaces(file.name)))()
+    props.addText(
+      ADD_UPLOADED_IMAGE_SETTINGS(formatFilenameForMarkdownRenderer(file.name))
+    )()
   }
 
   return (
@@ -78,13 +80,13 @@ export const ImageUploadModal = (props: Props) => {
       className="textarea-image-upload-modal"
       width={600}
       buttons={
-        showImageUploaderAddButton && (
+        imageUploaderUrl && (
           <button
             type="button"
             onClick={() => {
-              props.addText(ADD_IMAGE_BY_URL_SETTINGS)()
+              props.addText(ADD_IMAGE_BY_URL_SETTINGS(imageUploaderUrl as string))()
               props.setShowImageUploader(false)
-              setShowImageUploaderAddButton(false)
+              setImageUploaderUrl(undefined)
             }}
           >
             {props.messageOverrides?.addButtonLabel || 'Add'}
@@ -129,9 +131,7 @@ export const ImageUploadModal = (props: Props) => {
           }}
           onChange={(value) => {
             if (value && value.trim() !== '') {
-              setShowImageUploaderAddButton(true)
-            } else {
-              setShowImageUploaderAddButton(false)
+              setImageUploaderUrl(value)
             }
           }}
         />

@@ -10,9 +10,8 @@ import {
   CONTROLS,
   getNumLinebreaksAtEnd,
   IMAGE_CONTROL_INDEX,
-  UPLOADED_IMAGE_PREFIX,
 } from './utils'
-import { MarkdownRenderer, MarkdownRendererOptions } from '../../../markdownRenderer'
+import { MarkdownRenderer } from '../../../markdownRenderer'
 import { ImageUploadModalMessageOverrides, TextareaImageUploaderProps } from '../props'
 import { UploadedImage } from './models'
 import { ImageUploadModal } from './imageUploadModal'
@@ -169,23 +168,13 @@ export function useMarkdown(
     () => (
       <MarkdownRenderer
         value={value}
-        options={(defaultOptions: MarkdownRendererOptions) => ({
-          ...defaultOptions,
-          components: {
-            ...defaultOptions.components,
-            img: (props: any) => {
-              if (props.src?.startsWith(UPLOADED_IMAGE_PREFIX)) {
-                const filename = props.src.replace(UPLOADED_IMAGE_PREFIX, '').trim()
-                const image = uploadedImages.find((x) => x.formattedFilename === filename)
-                if (!image) {
-                  return 'Error retrieving the uploaded image!'
-                }
-                return <img src={image.imageData} alt={props.alt} />
-              }
-              return <img src={props.src || ''} alt={props.alt} />
-            },
-          },
-        })}
+        uploadedImages={uploadedImages.reduce(
+          (result, image) => ({
+            ...result,
+            [image.formattedFilename]: image.imageData,
+          }),
+          {}
+        )}
       />
     ),
     [value]

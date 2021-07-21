@@ -8,7 +8,15 @@ import './styles.scss'
 import { Checkbox } from '../standaloneControls'
 import { MarkdownRendererOptions } from './models'
 
-const DEFAULT_OPTIONS: MarkdownRendererOptions = {
+export const UPLOADED_IMAGE_PREFIX = 'uploaded:'
+
+const DEFAULT_OPTIONS = (
+  uploadedImages:
+    | {
+        [formattedFilename: string]: string
+      }
+    | undefined
+): MarkdownRendererOptions => ({
   remarkPlugins: [gfm, toc],
   rehypePlugins: [[rehypeHighlight, { ignoreMissing: true }]],
   components: {
@@ -40,18 +48,34 @@ const DEFAULT_OPTIONS: MarkdownRendererOptions = {
         </a>
       )
     },
-    img: (props: any) => <img src={props.src || ''} alt={props.alt} />,
+    img: (props: any) => {
+      if (props.src?.startsWith(UPLOADED_IMAGE_PREFIX)) {
+        const formattedFilename = props.src.replace(UPLOADED_IMAGE_PREFIX, '').trim()
+        if (uploadedImages && formattedFilename in uploadedImages) {
+          return <img src={uploadedImages[formattedFilename]} alt={props.alt} />
+        } else {
+          return 'Error retrieving the uploaded image!'
+        }
+      }
+      return <img src={props.src || ''} alt={props.alt} />
+    },
   },
   className: 'noka-markdown-renderer',
-}
+})
 
 type Props = {
   value: string
   options?: (defaultOptions: MarkdownRendererOptions) => MarkdownRendererOptions
+  uploadedImages?: {
+    [formattedFilename: string]: string
+  }
 }
 
-export const MarkdownRenderer = ({ value, options }: Props) => (
-  <ReactMarkdown {...(options ? options(DEFAULT_OPTIONS) : DEFAULT_OPTIONS)}>
-    {value}
-  </ReactMarkdown>
-)
+export const MarkdownRenderer = ({ value, options, uploadedImages }: Props) => {
+  const defaultOptions = DEFAULT_OPTIONS(uploadedImages)
+  return (
+    <ReactMarkdown {...(options ? options(defaultOptions) : defaultOptions)}>
+      {value}
+    </ReactMarkdown>
+  )
+}
