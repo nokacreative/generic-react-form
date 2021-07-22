@@ -16,6 +16,19 @@ import {
   formatImageDataString,
 } from '../../../markdownRenderer'
 
+export async function fileToUploadedImage(file: File): Promise<UploadedImage> {
+  const buffer = await file.arrayBuffer()
+  const bytes = [].slice.call(new Uint8Array(buffer))
+  const binary = bytes.reduce((result, b) => (result += String.fromCharCode(b)), '')
+  const imageData = btoa(binary)
+  const imageDataStr = formatImageDataString(file.type, imageData)
+  return {
+    formattedFilename: formatFilenameForMarkdownRenderer(file.name),
+    imageData: imageDataStr,
+    fileObject: file,
+  }
+}
+
 type Props = {
   show: boolean
   setShowImageUploader: React.Dispatch<React.SetStateAction<boolean>>
@@ -40,20 +53,7 @@ export const ImageUploadModal = (props: Props) => {
   } = props.imageUploaderProperties || {}
 
   async function onImageUpload(files: File[]) {
-    const newlyUploadedImages = await Promise.all(
-      files.map(async (file) => {
-        const buffer = await file.arrayBuffer()
-        const bytes = [].slice.call(new Uint8Array(buffer))
-        const binary = bytes.reduce((result, b) => (result += String.fromCharCode(b)), '')
-        const imageData = btoa(binary)
-        const imageDataStr = formatImageDataString(file.type, imageData)
-        return {
-          formattedFilename: formatFilenameForMarkdownRenderer(file.name),
-          imageData: imageDataStr,
-          fileObject: file,
-        }
-      })
-    )
+    const newlyUploadedImages = await Promise.all(files.map(fileToUploadedImage))
     props.setUplodedImages([...props.uploadedImages, ...newlyUploadedImages])
   }
 
@@ -79,6 +79,7 @@ export const ImageUploadModal = (props: Props) => {
       headerText={props.messageOverrides?.header || 'Upload Image'}
       className="textarea-image-upload-modal"
       width={600}
+      closeOnClickOutside
       buttons={
         imageUploaderUrl && (
           <button

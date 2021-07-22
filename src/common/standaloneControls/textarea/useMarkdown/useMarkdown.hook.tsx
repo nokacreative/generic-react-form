@@ -14,7 +14,7 @@ import {
 import { MarkdownRenderer } from '../../../markdownRenderer'
 import { ImageUploadModalMessageOverrides, TextareaImageUploaderProps } from '../props'
 import { UploadedImage } from './models'
-import { ImageUploadModal } from './imageUploadModal'
+import { fileToUploadedImage, ImageUploadModal } from './imageUploadModal'
 
 export function useMarkdown(
   use: boolean,
@@ -38,6 +38,27 @@ export function useMarkdown(
       setValue(defaultValue || '')
     }
   }, [defaultValue, use])
+
+  useEffect(() => {
+    if (imageUploaderProperties) {
+      const defaultUploadedImages = imageUploaderProperties.defaultValue
+      if (defaultValue == null) {
+        setUplodedImages([])
+      } else if (defaultUploadedImages instanceof File) {
+        fileToUploadedImage(defaultUploadedImages).then((image) => {
+          setUplodedImages([image])
+        })
+      } else if (
+        Array.isArray(defaultUploadedImages) &&
+        defaultUploadedImages.length > 0 &&
+        defaultUploadedImages[0] instanceof File
+      ) {
+        Promise.all((defaultUploadedImages as File[]).map(fileToUploadedImage)).then(
+          (images) => setUplodedImages(images)
+        )
+      }
+    }
+  }, [imageUploaderProperties?.defaultValue])
 
   useEffect(() => {
     if (isDisabled && showImageUploader) {
@@ -177,7 +198,7 @@ export function useMarkdown(
         )}
       />
     ),
-    [value]
+    [value, uploadedImages]
   )
 
   const CODE = {

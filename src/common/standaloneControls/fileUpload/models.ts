@@ -1,6 +1,15 @@
 import { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FileUploadStatus } from './enums'
 
+export type SupportedDefaultValues =
+  | File
+  | File[]
+  | FileList
+  | string
+  | string[]
+  | undefined
+  | null
+
 export type Props = {
   supportedFileExtensions?: string[]
   onUpload?: (files: File[]) => void
@@ -31,7 +40,7 @@ export type Props = {
   /** null = Remove icon */
   uploadIcon?: IconDefinition | null
   isDisabled?: boolean
-  defaultValue?: FileList | File | File[] | string | string[] | null
+  defaultValue?: SupportedDefaultValues
   inputName?: string
   onListedFileSelected?: (file: File, isDeselected: boolean) => void
   persistListedFileSelections?: boolean

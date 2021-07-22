@@ -315,8 +315,22 @@ export function generateControl<T>(
         return <FormControls.Radio {...baseProps} {...specificProps} />
       case FormControlType.CHECKBOX_GROUP:
         return <FormControls.Checkbox {...baseProps} {...specificProps} />
-      case FormControlType.TEXTAREA:
+      case FormControlType.TEXTAREA: {
+        if (specificProps.uploadedImagesPropertyPath) {
+          const defaultUploadedImages = get(
+            defaultValues,
+            specificProps.uploadedImagesPropertyPath
+          )
+          return (
+            <FormControls.Textarea
+              {...baseProps}
+              {...specificProps}
+              defaultUploadedImages={defaultUploadedImages}
+            />
+          )
+        }
         return <FormControls.Textarea {...baseProps} {...specificProps} />
+      }
       case FormControlType.ATTACHMENT:
         return <FormControls.Attachment {...baseProps} {...specificProps} />
       case FormControlType.DROPDOWN: {

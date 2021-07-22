@@ -4,9 +4,13 @@ import { Textarea, TextareaImageUploaderProps } from '../../standaloneControls/t
 import { TextareaControlConfig } from '../common/models'
 import { FormActionType } from '../main/enums'
 import { BaseFormControlProps, SpecificFormControlProps } from './models'
+import { SupportedDefaulFileUploadertValues } from '../../standaloneControls/fileUpload'
 
 export function FormTextarea<T>(
-  props: BaseFormControlProps<T> & SpecificFormControlProps<TextareaControlConfig>
+  props: BaseFormControlProps<T> &
+    SpecificFormControlProps<TextareaControlConfig> & {
+      defaultUploadedImages?: SupportedDefaulFileUploadertValues
+    }
 ) {
   const usesRichImageUpload = props.useMarkdown && props.allowImageUpload
   const {
@@ -50,6 +54,8 @@ export function FormTextarea<T>(
         props.saveValueToState(imagesPropertyPath, undefined)
       }
     }
+
+    finalImageUploaderProperties.defaultValue = props.defaultUploadedImages
   }
 
   return (
