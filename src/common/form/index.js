@@ -6,3 +6,4 @@ export {
   RadioSelection,
 } from './common/models'
 export { FormControlType, ControlRowWidth, RadioLayout } from './common/enums'
+import './global.scss'

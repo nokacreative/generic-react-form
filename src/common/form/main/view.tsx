@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import { get } from 'lodash'
 
-import '../../../assets/global.scss'
 import './styles.scss'
 
 import { Props, validateProps } from './props'
