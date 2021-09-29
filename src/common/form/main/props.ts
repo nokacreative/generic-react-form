@@ -40,6 +40,7 @@ export type Props<T> = {
   /** Hides all errors until the submit button has been clicked. */
   hideErrorsBeforeSubmit?: boolean
   submitButtonText?: string
+  submitButtonClassname?: string
   serverErrors?: { [propertyPath: string]: string }
   htmlProps?: Omit<
     React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,

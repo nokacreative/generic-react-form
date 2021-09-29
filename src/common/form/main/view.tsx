@@ -266,7 +266,7 @@ export function Form<T extends object>(props: Props<T>) {
           })
           if (firstControlName) {
             const firstControl = document.querySelector(
-              `[${CONTROL_ID_DATA_ATTR}=${firstControlName}]`
+              `[${CONTROL_ID_DATA_ATTR}='${firstControlName}'']`
             )
             scrollToElement(firstControl as HTMLElement, props.scrollContainerSelector)
           }
@@ -336,6 +336,7 @@ export function Form<T extends object>(props: Props<T>) {
           disabled={
             props.disableSubmitWhenInvalid && Object.keys(state.errors).length > 0
           }
+          className={props.submitButtonClassname}
         >
           {props.submitButtonText || 'Submit'}
         </button>
@@ -345,6 +346,7 @@ export function Form<T extends object>(props: Props<T>) {
       props.disableSubmitWhenInvalid,
       state.errors,
       props.submitButtonText,
+      props.submitButtonClassname,
       props.onSubmit,
     ]
   )
