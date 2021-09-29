@@ -296,9 +296,9 @@ export function Form<T extends object>(props: Props<T>) {
           ))
         }
         return (
-          <React.Fragment key={`formSection-${i}`}>
+          <div className="form-section" key={`formSection-${i}`}>
             {section.headerText !== '' && (
-              <h2>
+              <h2 className="form-section-header">
                 {section.headerText}
                 {section.onInfoIconClicked && (
                   <Icon
@@ -321,7 +321,7 @@ export function Form<T extends object>(props: Props<T>) {
             ) : (
               renderControls()
             )}
-          </React.Fragment>
+          </div>
         )
       }),
     [props.sections, state.data, props.isReadOnly, renderControl, saveValueToState]
