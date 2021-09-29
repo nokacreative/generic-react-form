@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,8 +17,9 @@
     "sourceMap": true,
     "declaration": true,
     "outDir": "dist/esm/",
+    "declarationDir": "dist",
     "types": ["node", "jest"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "./src/setupTest.js", "**/*.spec.js"]
 }

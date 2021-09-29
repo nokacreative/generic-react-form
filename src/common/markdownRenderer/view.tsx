@@ -5,7 +5,7 @@ import toc from 'remark-toc'
 import rehypeHighlight from 'rehype-highlight'
 
 import './styles.scss'
-import { Checkbox } from '../standaloneControls'
+import { Checkbox } from '../standaloneControls/checkbox'
 import { MarkdownRendererOptions } from './models'
 
 export const UPLOADED_IMAGE_PREFIX = 'uploaded:'

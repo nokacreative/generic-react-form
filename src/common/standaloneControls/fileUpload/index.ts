@@ -1,5 +1,5 @@
 export { FileUploaderContainer as FileUploader } from './container'
-export {
+export type {
   Props as FileUploaderProps,
   SupportedDefaultValues as SupportedDefaulFileUploadertValues,
 } from './models'
