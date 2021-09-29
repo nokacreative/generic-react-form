@@ -15,6 +15,7 @@ export type ConditionalBooleanFunction<T> = ConditionalFunction<T, boolean>
 // ======================================================
 
 interface BaseControlConfig<T> {
+  /** The data that is bound to this control. Also acts as the name of the control for reference purposes. */
   propertyPath: keyof T | string
   label?: string
   /** A message may be automatically generated depending on the properties of the control, such as having a minimum length or number of required selections. Using the non-function version of this property replaces it. */
@@ -120,6 +121,11 @@ export type DropdownControlConfig<T> = DropdownProps & {
   options: DropdownOption[] | ConditionalFunction<T, DropdownOption[]>
 }
 
+export type CustomControlConfig<T> = {
+  type: FormControlType.CUSTOM
+  render: JSX.Element | ConditionalFunction<T, JSX.Element>
+}
+
 export type SpecificFormControlConfig<T> =
   | InputControlConfig
   | RadioGroupControlConfig
@@ -127,6 +133,7 @@ export type SpecificFormControlConfig<T> =
   | TextareaControlConfig
   | AttachmentControlConfig
   | DropdownControlConfig<T>
+  | CustomControlConfig<T>
 
 export type FormControlConfig<T> = BaseControlConfig<T> & SpecificFormControlConfig<T>
 
