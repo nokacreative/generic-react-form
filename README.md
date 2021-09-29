@@ -28,12 +28,18 @@ yarn add @nokacreative/generic-react-form
 3. Plug them into `<Form>`
 
 ```
-import { Form } from '@noka/generic-react-form'
+import { Form, FormSectionConfig, FormControlType, InputType } from '@nokacreative/generic-react-form'
 import '@nokacreative/generic-react-form/dist/index.css' // <-- Must add this for proper styling to work, even if using custom styles
 
 import { emptyModel } from './data'
 
-const config: FormSectionConfig<TestModel>[] = [
+interface TestFormModel {
+  username: string,
+  password: string,
+  age: number
+}
+
+const config: FormSectionConfig<TestFormModel>[] = [
   {
     headerText: 'Login Details',
     controlRows: [
