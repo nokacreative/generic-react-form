@@ -29,7 +29,7 @@ yarn add @nokacreative/generic-react-form
 
 ```
 import { Form } from '@noka/generic-react-form'
-import '@nokacreative/generic-react-form/index.css' // <-- Must add this for proper styling to work, even if using custom styles
+import '@nokacreative/generic-react-form/dist/index.css' // <-- Must add this for proper styling to work, even if using custom styles
 
 import { emptyModel } from './data'
 
