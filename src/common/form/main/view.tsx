@@ -41,6 +41,7 @@ export function Form<T extends object>(props: Props<T>) {
   const controlValidatorsToTrigger = useRef<string[]>([])
   const formValidatorPropertyPaths = useRef<string[]>([])
   const [triggerFullValidation, setTriggerFullValidation] = useState<boolean>(false)
+  const [isFullValidationComplete, setFullValidationComplete] = useState<boolean>(false)
   const isAwaitingSubmit = useRef<boolean>(false)
   const submitButtonClicked = useRef<boolean>(false)
 
@@ -94,7 +95,8 @@ export function Form<T extends object>(props: Props<T>) {
         state.data,
         props.validator,
         setControlError,
-        formValidatorPropertyPaths
+        formValidatorPropertyPaths,
+        setFullValidationComplete
       )
     }
   }, [props.serverErrors, setControlError])
@@ -203,7 +205,8 @@ export function Form<T extends object>(props: Props<T>) {
         state.data,
         props.validator,
         setControlError,
-        formValidatorPropertyPaths
+        formValidatorPropertyPaths,
+        setFullValidationComplete
       )
       if (triggerFullValidation) {
         setTriggerFullValidation(false)
@@ -238,7 +241,10 @@ export function Form<T extends object>(props: Props<T>) {
     ) {
       setShowPageError(Object.keys(state.errors).length > 0)
     }
-    if (isAwaitingSubmit.current && props.onSubmit) {
+  }, [state.errors])
+
+  useEffect(() => {
+    if (isFullValidationComplete && isAwaitingSubmit.current && props.onSubmit) {
       if (Object.keys(state.errors).length === 0) {
         setShowPageError(false)
         props.onSubmit(state.data)
@@ -249,7 +255,7 @@ export function Form<T extends object>(props: Props<T>) {
       }
       isAwaitingSubmit.current = false
     }
-  }, [state.errors])
+  }, [isFullValidationComplete])
 
   useEffect(() => {
     if (showPageError) {

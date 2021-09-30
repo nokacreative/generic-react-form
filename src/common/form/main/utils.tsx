@@ -33,8 +33,8 @@ export function runFormValidator<T>(
   if (formValidator) {
     const errors = formValidator(data)
     if (errors) {
-      Object.entries(errors).forEach(([propertypath, errorMessage]) => {
-        setControlError(propertypath, ErrorType.CUSTOM, errorMessage)
+      Object.entries(errors).forEach(([propertyPath, errorMessage]) => {
+        setControlError(propertyPath, ErrorType.CUSTOM, errorMessage)
       })
     }
     const errorPaths = errors ? Object.keys(errors) : undefined
@@ -51,10 +51,17 @@ export function validateEntireForm<T>(
   data: T,
   formValidator: FormValidator<T> | undefined,
   setControlError: SetControlError<T>,
-  formValidatorPropertyPaths: React.MutableRefObject<string[]>
+  formValidatorPropertyPaths: React.MutableRefObject<string[]>,
+  setFullValidationComplete: React.Dispatch<React.SetStateAction<boolean>>
 ) {
+  setFullValidationComplete(false)
   Object.values(controlValidators).forEach((validate) => validate(null))
-  runFormValidator(data, formValidator, setControlError, formValidatorPropertyPaths)
+  setTimeout(() => {
+    runFormValidator(data, formValidator, setControlError, formValidatorPropertyPaths)
+  }, 100)
+  setTimeout(() => {
+    setFullValidationComplete(true)
+  }, 200)
 }
 
 function validateControl<T>(
