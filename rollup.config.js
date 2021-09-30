@@ -32,6 +32,7 @@ export default {
       failOnError: true,
       outputStyle: 'compressed',
       prefix: `@use '../../../assets/mixins' as *;`,
+      output: 'dist/index.css',
       processor: (css) =>
         postcss({
           extensions: ['scss'],

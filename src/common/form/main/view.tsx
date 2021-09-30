@@ -139,9 +139,24 @@ export function Form<T extends object>(props: Props<T>) {
         controlConfig,
         state.data,
         props.defaultValues,
-        getBooleanResult(sectionConfig.isRequired, state.data, props.isRequired),
-        getBooleanResult(sectionConfig.isDisabled, state.data, props.isDisabled),
-        getBooleanResult(sectionConfig.isReadOnly, state.data, props.isReadOnly),
+        getBooleanResult(
+          sectionConfig.isRequired,
+          state.data,
+          props.isRequired,
+          undefined
+        ),
+        getBooleanResult(
+          sectionConfig.isDisabled,
+          state.data,
+          props.isDisabled,
+          undefined
+        ),
+        getBooleanResult(
+          sectionConfig.isReadOnly,
+          state.data,
+          props.isReadOnly,
+          undefined
+        ),
         saveValueToState,
         setControlError,
         usesValidateMode(props.validationMode, ValidationMode.BLUR),
@@ -278,7 +293,7 @@ export function Form<T extends object>(props: Props<T>) {
   const formContents = React.useMemo(
     () =>
       props.sections.map((section, i) => {
-        if (getBooleanResult(section.isHidden, state.data, false)) {
+        if (getBooleanResult(section.isHidden, state.data, false, undefined)) {
           return null
         }
         function renderControls(arrayEntryIndex?: number) {

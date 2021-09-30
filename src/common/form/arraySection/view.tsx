@@ -8,6 +8,7 @@ import { SaveControlValueToState } from '../controls'
 import { FormActionType } from '../main/enums'
 import { GeneralIcons, Icon, TooltipLabelMode } from '../../icon'
 import { useEntryReorder } from './useReorder.hook'
+import { getBooleanResult } from '../main/utils'
 
 type Props<T> = {
   sectionConfig: ArrayFormSectionConfig<T>
@@ -110,14 +111,22 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
                   {sectionConfig.itemName || 'Entry'} #{i + 1}
                 </span>
               </div>
-              {!isReadOnly && (
-                <Icon
-                  icon={GeneralIcons.Remove}
-                  tooltip={sectionConfig.messageOverrides?.removeEntry || 'Remove Entry'}
-                  onClick={() => removeEntry(i, e)}
-                  tooltipAsLabel={TooltipLabelMode.ON_HOVER}
-                />
-              )}
+              {!isReadOnly &&
+                getBooleanResult(
+                  sectionConfig.disallowRemoval,
+                  props.data,
+                  undefined,
+                  i
+                ) !== true && (
+                  <Icon
+                    icon={GeneralIcons.Remove}
+                    tooltip={
+                      sectionConfig.messageOverrides?.removeEntry || 'Remove Entry'
+                    }
+                    onClick={() => removeEntry(i, e)}
+                    tooltipAsLabel={TooltipLabelMode.ON_HOVER}
+                  />
+                )}
             </div>
             <div className="main">{props.renderControls(i)}</div>
           </div>

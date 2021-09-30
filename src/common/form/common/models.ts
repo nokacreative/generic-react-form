@@ -7,7 +7,11 @@ import { FileUploaderProps } from '../../standaloneControls/fileUpload'
 import { InputType } from '../../standaloneControls/input'
 import { FormControlType, RadioLayout, ControlRowWidth } from './enums'
 
-export type ConditionalFunction<T, TReturnValue> = (data: T) => TReturnValue
+/** @param index The index of the array entry. Undefined if not in an array section. */
+export type ConditionalFunction<T, TReturnValue> = (
+  data: T,
+  index?: number
+) => TReturnValue
 export type ConditionalBooleanFunction<T> = ConditionalFunction<T, boolean>
 
 // ======================================================
@@ -167,6 +171,7 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
   allowReordering?: boolean
   itemName?: string
   blankValues: any
+  disallowRemoval?: ConditionalBooleanFunction<T>
   messageOverrides?: {
     addEntry?: string
     removeEntry?: string

@@ -196,13 +196,14 @@ export function usesValidateMode(
 export function getBooleanResult<T>(
   property: boolean | ConditionalBooleanFunction<T> | undefined,
   data: T,
-  parentResult: boolean | undefined
+  parentResult: boolean | undefined,
+  arrayEntryIndex: number | undefined
 ) {
   if (typeof property === 'boolean') {
     return property
   }
   if (property !== undefined) {
-    return property(data)
+    return property(data, arrayEntryIndex)
   }
   return parentResult
 }
@@ -231,7 +232,7 @@ export function generateControl<T>(
   parentPropertyPath: string | undefined,
   arrayEntryIndex: number | undefined
 ) {
-  if (getBooleanResult(controlConfig.isHidden, data, false)) {
+  if (getBooleanResult(controlConfig.isHidden, data, false, arrayEntryIndex)) {
     return null
   }
 
@@ -247,9 +248,24 @@ export function generateControl<T>(
   const hasError =
     hideErrors || controlConfig.hideErrorMessage ? false : propertyPath in errors
 
-  const isDisabled = !!getBooleanResult(controlConfig.isDisabled, data, isFormDisabled)
-  const isRequired = !!getBooleanResult(controlConfig.isRequired, data, isFormRequired)
-  const isReadOnly = !!getBooleanResult(controlConfig.isReadOnly, data, isFormReadOnly)
+  const isDisabled = !!getBooleanResult(
+    controlConfig.isDisabled,
+    data,
+    isFormDisabled,
+    arrayEntryIndex
+  )
+  const isRequired = !!getBooleanResult(
+    controlConfig.isRequired,
+    data,
+    isFormRequired,
+    arrayEntryIndex
+  )
+  const isReadOnly = !!getBooleanResult(
+    controlConfig.isReadOnly,
+    data,
+    isFormReadOnly,
+    arrayEntryIndex
+  )
 
   const customElement =
     typeof controlConfig.customElement === 'function'
