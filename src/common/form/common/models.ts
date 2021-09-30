@@ -155,7 +155,7 @@ export interface FormControlRow<T> {
 // ======================================================
 
 interface BaseFormSectionConfig<T> {
-  headerText: string
+  headerText?: string | JSX.Element
   controlRows: FormControlRow<T>[]
   isHidden?: boolean | ConditionalBooleanFunction<T>
   onInfoIconClicked?: () => void
@@ -169,7 +169,7 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
   parentPropertyPath: keyof T | string
   addEntryWhenEmpty?: boolean
   allowReordering?: boolean
-  itemName?: string
+  itemName?: string | JSX.Element
   blankValues: any
   disallowRemoval?: ConditionalBooleanFunction<T>
   messageOverrides?: {

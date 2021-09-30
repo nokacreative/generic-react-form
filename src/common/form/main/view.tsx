@@ -318,7 +318,7 @@ export function Form<T extends object>(props: Props<T>) {
         }
         return (
           <div className="form-section" key={`formSection-${i}`}>
-            {section.headerText !== '' && (
+            {section.headerText && (
               <h2 className="form-section-header">
                 {section.headerText}
                 {section.onInfoIconClicked && (
