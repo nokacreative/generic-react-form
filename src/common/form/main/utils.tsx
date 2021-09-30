@@ -83,35 +83,35 @@ function validateControl<T>(
           controlConfig.minNumSelections &&
           (!value || value.length < controlConfig.minNumSelections)
         ) {
-          setControlError(controlConfig.propertyPath, ErrorType.CHECKBOX_MIN_SELECTIONS)
+          setControlError(propertyPath, ErrorType.CHECKBOX_MIN_SELECTIONS)
           return
         }
         if (!value || value.length === 0) {
           if (controlConfig.selections.length === 1) {
-            setControlError(controlConfig.propertyPath, ErrorType.REQUIRED)
+            setControlError(propertyPath, ErrorType.REQUIRED)
             return
           }
-          setControlError(controlConfig.propertyPath, ErrorType.CHECKBOX_REQUIRED)
+          setControlError(propertyPath, ErrorType.CHECKBOX_REQUIRED)
           return
         }
       }
       if (value == null || (typeof value === 'string' && value.trim() === '')) {
-        setControlError(controlConfig.propertyPath, ErrorType.REQUIRED)
+        setControlError(propertyPath, ErrorType.REQUIRED)
         return
       }
     }
 
     if (value && controlConfig.type === FormControlType.INPUT) {
       if (controlConfig.minLength && value.length < controlConfig.minLength) {
-        setControlError(controlConfig.propertyPath, ErrorType.MIN_LENGTH)
+        setControlError(propertyPath, ErrorType.MIN_LENGTH)
         return
       }
       if (controlConfig.maxLength && value.length > controlConfig.maxLength) {
-        setControlError(controlConfig.propertyPath, ErrorType.MAX_LENGTH)
+        setControlError(propertyPath, ErrorType.MAX_LENGTH)
         return
       }
       if (controlConfig.inputType === InputType.EMAIL && !EMAIL_REGEX.test(value)) {
-        setControlError(controlConfig.propertyPath, ErrorType.EMAIL)
+        setControlError(propertyPath, ErrorType.EMAIL)
         return
       }
       if (
@@ -119,16 +119,16 @@ function validateControl<T>(
         value &&
         !PHONE_REGEX.test(value)
       ) {
-        setControlError(controlConfig.propertyPath, ErrorType.PHONE)
+        setControlError(propertyPath, ErrorType.PHONE)
         return
       }
       if (controlConfig.inputType === InputType.NUMBER) {
         if (controlConfig.minValue && value < controlConfig.minValue) {
-          setControlError(controlConfig.propertyPath, ErrorType.MIN_VALUE)
+          setControlError(propertyPath, ErrorType.MIN_VALUE)
           return
         }
         if (controlConfig.maxValue && value > controlConfig.maxValue) {
-          setControlError(controlConfig.propertyPath, ErrorType.MAX_VALUE)
+          setControlError(propertyPath, ErrorType.MAX_VALUE)
           return
         }
       }
@@ -139,7 +139,7 @@ function validateControl<T>(
         controlConfig.maxNumSelections &&
         value.length > controlConfig.maxNumSelections
       ) {
-        setControlError(controlConfig.propertyPath, ErrorType.CHECKBOX_MAX_SELECTIONS)
+        setControlError(propertyPath, ErrorType.CHECKBOX_MAX_SELECTIONS)
         return
       }
     }
@@ -147,12 +147,12 @@ function validateControl<T>(
     if (controlConfig.validator) {
       const customErrorMessage = controlConfig.validator(value, data)
       if (customErrorMessage != null) {
-        setControlError(controlConfig.propertyPath, ErrorType.CUSTOM, customErrorMessage)
+        setControlError(propertyPath, ErrorType.CUSTOM, customErrorMessage)
         return
       }
     }
 
-    setControlError(controlConfig.propertyPath, undefined)
+    setControlError(propertyPath, undefined)
   }
 }
 
