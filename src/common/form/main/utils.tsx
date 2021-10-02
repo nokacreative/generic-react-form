@@ -361,7 +361,9 @@ export function generateControl<T>(
         return (
           <FormControls.Dropdown
             {...baseProps}
-            options={typeof options === 'function' ? options(data) : options}
+            options={
+              typeof options === 'function' ? options(data, arrayEntryIndex) : options
+            }
             {...rest}
           />
         )
