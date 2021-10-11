@@ -1,7 +1,7 @@
 {
   "name": "@nokacreative/generic-react-form",
   "description": "A generic form made in react.",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "private": false,
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
