@@ -4,10 +4,12 @@ import { InputType } from './enums'
 export type InputValueFormatter = (value: string) => any
 
 export function formatPhoneNumber(value: string) {
-  const numbersOnly = stripNonNumericValues(value)
-  const match = numbersOnly.match(/^(\d{3})(\d{3})(\d{4})$/)
+  const numbersOnly = stripNonNumericValues(value, true)
+  const match = numbersOnly.match(/^(\+\d{1,2})?(\d{3})(\d{3})(\d{4})$/)
   if (match) {
-    return `${match[1]}-${match[2]}-${match[3]}`
+    return match[1]
+      ? `${match[1]} ${match[2]}-${match[3]}-${match[4]}`
+      : `${match[2]}-${match[3]}-${match[4]}`
   } else {
     return value
   }

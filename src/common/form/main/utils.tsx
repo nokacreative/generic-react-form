@@ -11,7 +11,12 @@ import { BaseFormControlProps, FormControls, SaveControlValueToState } from '../
 import { FormControlType } from '../common/enums'
 import { ErrorMap, ErrorMessages } from './models'
 import { ErrorType, ValidationMode } from './enums'
-import { EMAIL_REGEX, PHONE_REGEX, DEFAULT_ERROR_MESSAGES } from './data'
+import {
+  EMAIL_REGEX,
+  PHONE_REGEX,
+  DEFAULT_ERROR_MESSAGES,
+  PHONE_REGEX_AREACODE_REQUIRED,
+} from './data'
 import { FormValidator } from './props'
 import { InputType } from '../../standaloneControls/input'
 
@@ -121,13 +126,14 @@ function validateControl<T>(
         setControlError(propertyPath, ErrorType.EMAIL)
         return
       }
-      if (
-        controlConfig.inputType === InputType.PHONE &&
-        value &&
-        !PHONE_REGEX.test(value)
-      ) {
-        setControlError(propertyPath, ErrorType.PHONE)
-        return
+      if (controlConfig.inputType === InputType.PHONE && value) {
+        if (
+          (controlConfig.requireAreaCode && !PHONE_REGEX_AREACODE_REQUIRED.test(value)) ||
+          !PHONE_REGEX.test(value)
+        ) {
+          setControlError(propertyPath, ErrorType.PHONE)
+          return
+        }
       }
       if (controlConfig.inputType === InputType.NUMBER) {
         if (controlConfig.minValue && value < controlConfig.minValue) {

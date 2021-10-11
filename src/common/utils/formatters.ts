@@ -24,6 +24,6 @@ export function formatMoney(
   return removeSymbol ? formatted.slice(1) : formatted
 }
 
-export function stripNonNumericValues(text: string) {
-  return text.replace(/\D/g, '')
+export function stripNonNumericValues(text: string, phoneMode?: boolean) {
+  return phoneMode ? text.replace(/[^\d\+]/g, '') : text.replace(/\D/g, '')
 }

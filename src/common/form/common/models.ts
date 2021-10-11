@@ -54,7 +54,12 @@ export interface BaseInputControlConfig {
   >
 }
 export interface StandardInputControlConfig extends BaseInputControlConfig {
-  inputType?: Exclude<InputType, InputType.NUMBER | InputType.MONEY>
+  inputType?: Exclude<InputType, InputType.NUMBER | InputType.MONEY | InputType.PHONE>
+}
+
+export interface PhoneInputcontrolConfig extends BaseInputControlConfig {
+  inputType: InputType.PHONE
+  requireAreaCode?: boolean
 }
 
 export interface NumericInputControlConfig extends BaseInputControlConfig {
@@ -77,6 +82,7 @@ export type DateInputControlConfig = BaseInputControlConfig &
 
 export type InputControlConfig =
   | StandardInputControlConfig
+  | PhoneInputcontrolConfig
   | NumericInputControlConfig
   | MoneyInputControlConfig
   | DateInputControlConfig

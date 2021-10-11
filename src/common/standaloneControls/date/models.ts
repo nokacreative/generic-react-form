@@ -13,6 +13,7 @@ type BaseProps = {
   timeFormat?: string
   locale?: string
   placeholder?: string
+  isDisabled?: boolean
 }
 
 type RangedProps =

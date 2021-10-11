@@ -52,6 +52,7 @@ export function FormDateInput<T>(
       placeholder={props.placeholder}
       {...rangedProps}
       isReadOnly={props.isReadOnly}
+      isDisabled={props.isDisabled}
     />
   )
 }

@@ -42,6 +42,7 @@ export function DateInput(props: Props) {
         maxDate={props.latestDate}
         minTime={props.earliestTime}
         maxTime={props.latestTime}
+        disabled={props.isDisabled}
       />
       <Icon icon={isTimeOnly ? GeneralIcons.Clock : GeneralIcons.Calendar} />
     </div>
