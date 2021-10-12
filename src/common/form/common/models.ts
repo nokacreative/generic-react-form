@@ -126,9 +126,13 @@ export type AttachmentControlConfig = Omit<
   saveFullFile?: boolean
 }
 
-export type DropdownControlConfig<T> = DropdownProps & {
+export type DropdownControlConfig<T> = Omit<
+  DropdownProps,
+  'options' | 'onOptionSelected'
+> & {
   type: FormControlType.DROPDOWN
   options: DropdownOption[] | ConditionalFunction<T, DropdownOption[]>
+  onOptionSelected?: (option: DropdownOption | undefined, data: T, index?: number) => void
 }
 
 export type CustomControlConfig<T> = {

@@ -364,12 +364,17 @@ export function generateControl<T>(
       case FormControlType.ATTACHMENT:
         return <FormControls.Attachment {...baseProps} {...specificProps} />
       case FormControlType.DROPDOWN: {
-        const { options, ...rest } = specificProps
+        const { options, onOptionSelected, ...rest } = specificProps
         return (
           <FormControls.Dropdown
             {...baseProps}
             options={
               typeof options === 'function' ? options(data, arrayEntryIndex) : options
+            }
+            onOptionSelected={
+              onOptionSelected
+                ? (option) => onOptionSelected(option, data, arrayEntryIndex)
+                : undefined
             }
             {...rest}
           />

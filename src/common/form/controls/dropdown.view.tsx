@@ -5,7 +5,10 @@ import { Dropdown, DropdownOption } from '../../standaloneControls/dropdown'
 import { DropdownControlConfig } from '../common/models'
 
 export function FormDropdown<T>(
-  props: BaseFormControlProps<T> & SpecificFormControlProps<DropdownControlConfig<T>>
+  props: BaseFormControlProps<T> &
+    Omit<SpecificFormControlProps<DropdownControlConfig<T>>, 'onOptionSelected'> & {
+      onOptionSelected?: (option: DropdownOption | undefined) => void
+    }
 ) {
   const latestValues = useRef<any | any[]>()
 

@@ -1,9 +1,14 @@
 import { ReactNode } from 'react'
 
+/**
+ * @property value The value associated with this option. Is automatically saved to the model when used with a <Form>.
+ * @property extraData Any extra data for custom handling. Untouched in this library.
+ */
 export interface DropdownOption {
   text: string
   render?: () => ReactNode
   value: any
+  extraData?: any
 }
 
 export type BaseProps = {
