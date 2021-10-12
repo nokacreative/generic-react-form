@@ -128,7 +128,8 @@ function validateControl<T>(
       }
       if (controlConfig.inputType === InputType.PHONE && value) {
         if (
-          (controlConfig.requireAreaCode && !PHONE_REGEX_AREACODE_REQUIRED.test(value)) ||
+          (controlConfig.requireCountryCode &&
+            !PHONE_REGEX_AREACODE_REQUIRED.test(value)) ||
           !PHONE_REGEX.test(value)
         ) {
           setControlError(propertyPath, ErrorType.PHONE)

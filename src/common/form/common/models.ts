@@ -59,7 +59,7 @@ export interface StandardInputControlConfig extends BaseInputControlConfig {
 
 export interface PhoneInputcontrolConfig extends BaseInputControlConfig {
   inputType: InputType.PHONE
-  requireAreaCode?: boolean
+  requireCountryCode?: boolean
 }
 
 export interface NumericInputControlConfig extends BaseInputControlConfig {
