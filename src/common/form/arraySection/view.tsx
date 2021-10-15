@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { get } from 'lodash'
 
 import './styles.scss'
@@ -20,6 +20,7 @@ type Props<T> = {
 
 export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
   const entries = get(props.data, sectionConfig.parentPropertyPath) as any[]
+  const prevEntries = useRef(entries)
   const isReadOnly = props.isFormReadOnly || sectionConfig.isReadOnly
 
   const onEntryReordered = useCallback(
@@ -85,6 +86,28 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
       addEntry()
     }
   }, [sectionConfig.addEntryWhenEmpty, entries.length])
+
+  useEffect(() => {
+    if (sectionConfig.onEntriesChanged) {
+      if (entries.length !== prevEntries.current.length) {
+        sectionConfig.onEntriesChanged(entries)
+      } else {
+        entries.forEach((e, i) => {
+          const kvps = Object.entries(e)
+          const prevKvps = Object.entries(prevEntries.current[i])
+          if (
+            kvps.some(
+              ([k, v], j) => !prevKvps[j] || prevKvps[j][0] !== k || prevKvps[j][1] !== v
+            )
+          ) {
+            sectionConfig.onEntriesChanged!(entries)
+            return
+          }
+        })
+      }
+      prevEntries.current = entries
+    }
+  }, [entries, sectionConfig.onEntriesChanged])
 
   return (
     <div className="control-array-section">

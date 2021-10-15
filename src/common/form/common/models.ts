@@ -182,6 +182,7 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
   itemName?: string | JSX.Element
   blankValues: any
   disallowRemoval?: ConditionalBooleanFunction<T>
+  onEntriesChanged?: (entries: any[]) => void
   messageOverrides?: {
     addEntry?: string
     removeEntry?: string
