@@ -9,10 +9,11 @@ export const FileUploaderContainer = withReadOnlySwitch<Props>(
   (props) => <FileUploader {...props} />,
   (props) => (
     <ReadOnlyFileUploader
-      filenames={
-        Array.isArray(props.defaultValue)
-          ? (props.defaultValue as string[])
-          : [props.defaultValue as string]
+      defaultValue={props.defaultValue}
+      onListedFileSelected={
+        props.onListedFileSelected
+          ? (file) => props.onListedFileSelected!(file, false)
+          : undefined
       }
     />
   )

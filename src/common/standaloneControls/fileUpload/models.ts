@@ -34,7 +34,7 @@ export type Props = {
       totalFileSizeLimit: number | undefined
     ) => string
     duplicateFileNameError?: (duplicateFileName: string) => string
-    /** Only used in print view */
+    /** Only used in print and readonly views */
     noFilesUploaded?: string
   }
   /** null = Remove icon */

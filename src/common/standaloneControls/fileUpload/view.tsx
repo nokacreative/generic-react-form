@@ -8,33 +8,14 @@ import { Props } from './models'
 import { InlineError } from '../inlineError'
 import { NOKA_COLORS_CLASS } from '../../../assets/constants'
 import { FileUploadStatus } from './enums'
+import { useGetFilesFromDefaultValue } from './getFilesFromDefaultValue.hook'
 
 export function FileUploader(props: Props) {
-  const [files, setFiles] = useState<File[]>()
+  const [files, setFiles] = useGetFilesFromDefaultValue(props.defaultValue)
   const [isDraggingOver, setDraggingOver] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>()
   const [fileSizeMsg, setFileSizeMsg] = useState<string>('')
   const [selectedListedFileIndices, setSelectedListedFileIndices] = useState<number[]>([])
-
-  useEffect(() => {
-    if (typeof props.defaultValue === 'string') {
-      setFiles([new File([], props.defaultValue)])
-    } else if (props.defaultValue instanceof File) {
-      setFiles([props.defaultValue])
-    } else if (props.defaultValue instanceof FileList) {
-      setFiles(Array.from(props.defaultValue))
-    } else if (props.defaultValue == null) {
-      setFiles(undefined)
-    } else if (Array.isArray(props.defaultValue)) {
-      if (typeof props.defaultValue[0] === 'string') {
-        setFiles(
-          (props.defaultValue as string[]).map((filename) => new File([], filename))
-        )
-      } else if (props.defaultValue[0] instanceof File) {
-        setFiles(props.defaultValue as File[])
-      }
-    }
-  }, [props.defaultValue])
 
   useEffect(() => {
     if (props.messageOverrides?.fileSizeError) {

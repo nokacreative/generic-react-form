@@ -57,6 +57,8 @@ export function FormAttachmentControl<T>(
       isDisabled={props.isDisabled}
       isReadOnly={props.isReadOnly}
       inputName={props.propertyPath as string}
+      onListedFileSelected={props.onListedFileSelected}
+      persistListedFileSelections={props.persistListedFileSelections}
     />
   )
 }
