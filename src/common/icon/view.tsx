@@ -43,7 +43,14 @@ export function Icon(props: Props) {
       title={props.tooltip}
       aria-hidden={props.onClick === undefined}
       id={props.id}
-      onClick={props.onClick}
+      onClick={
+        props.onClick
+          ? (e) => {
+              e.stopPropagation()
+              props.onClick!()
+            }
+          : undefined
+      }
     >
       <FontAwesomeIcon icon={props.icon} size={props.size} />
       {showTooltip && <span className="label">{props.tooltip}</span>}
