@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { get } from 'lodash'
 
 import './styles.scss'
@@ -21,7 +21,21 @@ type Props<T> = {
 export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
   const entries = get(props.data, sectionConfig.parentPropertyPath) as any[]
   const prevEntries = useRef(entries)
-  const isReadOnly = props.isFormReadOnly || sectionConfig.isReadOnly
+  const isReadOnly = getBooleanResult(
+    sectionConfig.isReadOnly,
+    props.data,
+    props.isFormReadOnly,
+    undefined
+  )
+
+  const noEntriesMessage = useMemo(() => {
+    const m = sectionConfig.messageOverrides?.noEntries
+    if (!m) return undefined
+    if (typeof m === 'object') {
+      return isReadOnly ? m.inReadOnlyMode : m.whenEditing
+    }
+    return m
+  }, [sectionConfig.messageOverrides?.noEntries, isReadOnly])
 
   const onEntryReordered = useCallback(
     (fromIndex: number, toIndex: number) => {
@@ -82,7 +96,7 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
   }
 
   useEffect(() => {
-    if ((sectionConfig.addEntryWhenEmpty, entries.length === 0)) {
+    if (sectionConfig.addEntryWhenEmpty && entries.length === 0) {
       addEntry()
     }
   }, [sectionConfig.addEntryWhenEmpty, entries.length])
@@ -111,6 +125,9 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
 
   return (
     <div className="control-array-section">
+      {(!entries || entries.length === 0) && noEntriesMessage && (
+        <p>{noEntriesMessage}</p>
+      )}
       {entries.map((e: any, i: number) => (
         <React.Fragment key={`${sectionConfig.parentPropertyPath}-entry-${i}`}>
           {dropZones && dropZones[i]}

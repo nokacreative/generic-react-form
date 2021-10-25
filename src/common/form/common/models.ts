@@ -188,6 +188,12 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
     removeEntry?: string
     restoreEntry?: string
     reorderEntry?: string
+    noEntries?:
+      | string
+      | {
+          whenEditing?: string
+          inReadOnlyMode?: string
+        }
   }
 }
 
