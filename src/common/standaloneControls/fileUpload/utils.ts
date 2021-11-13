@@ -9,7 +9,7 @@ export function onDragOver(e: React.DragEvent<HTMLDivElement>) {
 export function onDrop(
   e: React.DragEvent<HTMLElement>,
   existingFiles: File[] | undefined,
-  setFiles: React.Dispatch<React.SetStateAction<File[] | undefined>>,
+  startUpload: (newFiles: File[]) => void,
   setDraggingOver: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   e.preventDefault()
@@ -22,7 +22,7 @@ export function onDrop(
           (f) => existingFiles.find((ef) => ef.name === f.name) === undefined
         )
       : newFiles
-    setFiles([...(existingFiles || []), ...uniqueFiles])
+    startUpload(uniqueFiles)
     e.dataTransfer.clearData()
   }
 }

@@ -76,8 +76,7 @@ export function FileUploader(props: Props) {
     }
   }
 
-  function startUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const newFiles = Array.from(event.target.files || [])
+  function startUpload(newFiles: File[]) {
     if (newFiles.length === 0) {
       return
     }
@@ -246,14 +245,14 @@ export function FileUploader(props: Props) {
           }}
           onMouseLeave={() => setDraggingOver(false)}
           onDragOver={onDragOver}
-          onDrop={(e) => onDrop(e, files, setFiles, setDraggingOver)}
+          onDrop={(e) => onDrop(e, files, startUpload, setDraggingOver)}
           ref={dropzone}
         >
           <input
             ref={fileBrowserButton}
             type="file"
             name={props.inputName}
-            onChange={startUpload}
+            onChange={(e) => startUpload(Array.from(e.target.files || []))}
             multiple={props.isMultiple}
             accept={props.supportedFileExtensions?.join(',')}
           />
