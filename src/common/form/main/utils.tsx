@@ -1,6 +1,7 @@
 import { get } from 'lodash'
 import React from 'react'
-
+import { InputType } from '../../standaloneControls/input'
+import { FormControlType } from '../common/enums'
 import {
   ConditionalBooleanFunction,
   DateInputControlConfig,
@@ -8,17 +9,15 @@ import {
   SpecificFormControlConfig,
 } from '../common/models'
 import { BaseFormControlProps, FormControls, SaveControlValueToState } from '../controls'
-import { FormControlType } from '../common/enums'
-import { ErrorMap, ErrorMessages } from './models'
-import { ErrorType, ValidationMode } from './enums'
 import {
+  DEFAULT_ERROR_MESSAGES,
   EMAIL_REGEX,
   PHONE_REGEX,
-  DEFAULT_ERROR_MESSAGES,
   PHONE_REGEX_AREACODE_REQUIRED,
 } from './data'
+import { ErrorType, ValidationMode } from './enums'
+import { ErrorMap, ErrorMessages } from './models'
 import { FormValidator } from './props'
-import { InputType } from '../../standaloneControls/input'
 
 export type SetControlError<T> = (
   propertyPath: keyof T | string,
