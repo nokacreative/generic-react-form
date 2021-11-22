@@ -179,7 +179,7 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
   parentPropertyPath: keyof T | string
   addEntryWhenEmpty?: boolean
   allowReordering?: boolean
-  itemName?: string | JSX.Element
+  itemName?: string | ((index: number) => JSX.Element)
   blankValues: any
   disallowRemoval?: ConditionalBooleanFunction<T>
   onEntriesChanged?: (entries: any[]) => void

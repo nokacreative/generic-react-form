@@ -148,7 +148,11 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
                   </span>
                 )}
                 <span>
-                  {sectionConfig.itemName || 'Entry'} #{i + 1}
+                  {sectionConfig.itemName
+                    ? typeof sectionConfig.itemName === 'string'
+                      ? `${sectionConfig.itemName} #${i + 1}`
+                      : sectionConfig.itemName(i + 1)
+                    : `Entry #${i + 1}`}
                 </span>
               </div>
               {!isReadOnly &&
