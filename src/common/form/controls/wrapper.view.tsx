@@ -8,6 +8,8 @@ type Props = {
   hasError?: boolean
   errorMessage?: string
   width?: string
+  id?: string
+  className?: string
   growthRatio?: number
   alignRight?: boolean
   propertyPath: string
@@ -25,6 +27,9 @@ export function FormControlWrapper(props: Props) {
   if (props.hasError) {
     classes.push('error')
   }
+  if (props.className) {
+    classes.push(`${props.className}`)
+  }
   if (props.alignRight) {
     classes.push('right-aligned')
   }
@@ -37,6 +42,7 @@ export function FormControlWrapper(props: Props) {
       className={classes.join(' ')}
       style={props.growthRatio !== undefined ? { flex: props.growthRatio } : {}}
       {...{ [CONTROL_ID_DATA_ATTR]: props.propertyPath }}
+      id={props.id}
     >
       {props.label !== undefined && (
         <label htmlFor={props.propertyPath}>
@@ -54,7 +60,13 @@ export function FormControlWrapper(props: Props) {
       {props.description && (
         <div className="control-description">{props.description}</div>
       )}
-      <div className="control-child-wrapper" style={{ width: props.width }}>
+      <div
+        className={`control-child-wrapper ${
+          props.className !== undefined ? props.className : ''
+        }`}
+        style={{ width: props.width }}
+        id={`contorl-child-wrapper-id ${props.id}`}
+      >
         {props.children}
         {props.customElement}
       </div>

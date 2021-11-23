@@ -1,11 +1,10 @@
 import React from 'react'
 import { TextareaProps } from '../../standaloneControls'
-
 import { DateInputProps } from '../../standaloneControls/date'
 import { DropdownOption, DropdownProps } from '../../standaloneControls/dropdown'
 import { FileUploaderProps } from '../../standaloneControls/fileUpload'
 import { InputType } from '../../standaloneControls/input'
-import { FormControlType, RadioLayout, ControlRowWidth } from './enums'
+import { ControlRowWidth, FormControlType, RadioLayout } from './enums'
 
 /** @param index The index of the array entry. Undefined if not in an array section. */
 export type ConditionalFunction<T, TReturnValue> = (
@@ -32,6 +31,10 @@ interface BaseControlConfig<T> {
   growthRatio?: number
   /** A static width to use */
   width?: string
+  /** A static id to target a specific class */
+  id?: string
+  /** A static className to target a specific class */
+  className?: string
   hideErrorMessage?: boolean
   alignRight?: boolean
   /** Return an error message if there is an error, or undefined | null otherwise */
@@ -157,6 +160,8 @@ export type FormControlConfig<T> = BaseControlConfig<T> & SpecificFormControlCon
 
 export interface FormControlRow<T> {
   width?: ControlRowWidth
+  id?: string
+  className?: string
   controls: FormControlConfig<T>[]
 }
 

@@ -1,12 +1,23 @@
-import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import { get } from 'lodash'
-
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { NOKA_COLORS_CLASS } from '../../../assets/constants'
 import '../../../assets/global.scss'
-import './styles.scss'
-
-import { Props, validateProps } from './props'
-import { createFormReducer, initialFormState } from './formReducer'
+import { GeneralIcons, Icon } from '../../icon'
+import { PageError } from '../../standaloneControls/pageError'
+import { FormArraySection } from '../arraySection'
+import { FormControlConfig, FormSectionConfig } from '../common/models'
 import { FormControlRow } from '../controlRow'
+import { CONTROL_ID_DATA_ATTR } from '../controls'
+import {
+  ErrorType,
+  FormActionType,
+  PageErrorDisplayMode,
+  SubmissionErrorScrollMode,
+  ValidationMode,
+} from './enums'
+import { createFormReducer, initialFormState } from './formReducer'
+import { Props, validateProps } from './props'
+import './styles.scss'
 import {
   ControlValidatorMap,
   generateControl,
@@ -16,19 +27,6 @@ import {
   usesValidateMode,
   validateEntireForm,
 } from './utils'
-import {
-  ErrorType,
-  FormActionType,
-  PageErrorDisplayMode,
-  SubmissionErrorScrollMode,
-  ValidationMode,
-} from './enums'
-import { PageError } from '../../standaloneControls/pageError'
-import { FormControlConfig, FormSectionConfig } from '../common/models'
-import { FormArraySection } from '../arraySection'
-import { NOKA_COLORS_CLASS } from '../../../assets/constants'
-import { GeneralIcons, Icon } from '../../icon'
-import { CONTROL_ID_DATA_ATTR } from '../controls'
 
 export function Form<T extends object>(props: Props<T>) {
   const [state, dispatch] = useReducer(
@@ -304,7 +302,12 @@ export function Form<T extends object>(props: Props<T>) {
         }
         function renderControls(arrayEntryIndex?: number) {
           return section.controlRows.map((row, j) => (
-            <FormControlRow width={row.width} key={`formControlRow-${i}-${j}`}>
+            <FormControlRow
+              id={row.id}
+              className={row.className}
+              width={row.width}
+              key={`formControlRow-${i}-${j}`}
+            >
               {row.controls.map((controlConfig, k) =>
                 renderControl(
                   controlConfig,
