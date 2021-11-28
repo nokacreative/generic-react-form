@@ -159,10 +159,20 @@ function validateControl<T>(
 
     if (controlConfig.validator) {
       const customErrorMessage = controlConfig.validator(value, data)
-      if (customErrorMessage != null) {
+      if (!customErrorMessage) {
+        setControlError(propertyPath, undefined)
+        return
+      }
+      if(typeof customErrorMessage === 'string') {
         setControlError(propertyPath, ErrorType.CUSTOM, customErrorMessage)
         return
       }
+      Object.entries(customErrorMessage).forEach(
+        ([propertyPath, message]) => message ?
+        setControlError(propertyPath, ErrorType.CUSTOM, message) :
+        setControlError(propertyPath, undefined)
+      )
+      return
     }
 
     setControlError(propertyPath, undefined)

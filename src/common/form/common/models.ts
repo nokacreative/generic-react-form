@@ -4,6 +4,7 @@ import { DateInputProps } from '../../standaloneControls/date'
 import { DropdownOption, DropdownProps } from '../../standaloneControls/dropdown'
 import { FileUploaderProps } from '../../standaloneControls/fileUpload'
 import { InputType } from '../../standaloneControls/input'
+import { FormValidator } from '../main/props'
 import { ControlRowWidth, FormControlType, RadioLayout } from './enums'
 
 /** @param index The index of the array entry. Undefined if not in an array section. */
@@ -38,7 +39,7 @@ interface BaseControlConfig<T> {
   hideErrorMessage?: boolean
   alignRight?: boolean
   /** Return an error message if there is an error, or undefined | null otherwise */
-  validator?: (fieldValue: any, formData: T) => string | undefined | null
+  validator?: (fieldValue: any, formData: T) => string | { [propertyPath: string]: string | undefined | null } | undefined | null
   onInfoIconClicked?: () => void
   /** Whether or not the label should be inline with the control */
   isInline?: boolean
