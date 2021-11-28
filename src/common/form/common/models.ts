@@ -188,6 +188,7 @@ export interface ArrayFormSectionConfig<T> extends BaseFormSectionConfig<T> {
   allowReordering?: boolean
   itemName?: string | ((index: number) => JSX.Element)
   blankValues: any
+  disallowAddition?: ConditionalBooleanFunction<T>
   disallowRemoval?: ConditionalBooleanFunction<T>
   onEntriesChanged?: (entries: any[]) => void
   messageOverrides?: {
