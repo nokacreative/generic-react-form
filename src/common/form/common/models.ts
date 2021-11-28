@@ -4,6 +4,7 @@ import { DateInputProps } from '../../standaloneControls/date'
 import { DropdownOption, DropdownProps } from '../../standaloneControls/dropdown'
 import { FileUploaderProps } from '../../standaloneControls/fileUpload'
 import { InputType } from '../../standaloneControls/input'
+import { ErrorMap } from '../main/models'
 import { FormValidator } from '../main/props'
 import { ControlRowWidth, FormControlType, RadioLayout } from './enums'
 
@@ -141,7 +142,7 @@ export type DropdownControlConfig<T> = Omit<
 
 export type CustomControlConfig<T> = {
   type: FormControlType.CUSTOM
-  render: JSX.Element | ConditionalFunction<T, JSX.Element>
+  render: JSX.Element | ConditionalFunction<{data: T, formErrors: ErrorMap}, JSX.Element>
 }
 
 export type SpecificFormControlConfig<T> =

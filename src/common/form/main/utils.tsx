@@ -391,7 +391,7 @@ export function generateControl<T>(
       }
       case FormControlType.CUSTOM: {
         if (typeof specificProps.render === 'function') {
-          return specificProps.render(data)
+          return specificProps.render({data, formErrors: errors})
         }
         return specificProps.render
       }
