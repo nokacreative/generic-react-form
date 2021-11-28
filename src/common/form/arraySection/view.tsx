@@ -177,7 +177,7 @@ export function FormArraySection<T>({ sectionConfig, ...props }: Props<T>) {
         </React.Fragment>
       ))}
       {dropZones && dropZones[dropZones.length - 1]}
-      {!isReadOnly && !sectionConfig.disallowAddition?.(props.data) && (
+      {!isReadOnly && !sectionConfig.disallowAddition && (
         <>
           <Icon
             icon={GeneralIcons.Add}
