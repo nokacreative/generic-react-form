@@ -17,6 +17,7 @@ export function FormInput<T>(
       onBlur={(value: any) => {
         props.saveValueToState(props.propertyPath, value)
         if (props.validateOnBlur) props.validate(value)
+        if (props.onBlur) props.onBlur(value)
       }}
       htmlProps={{
         ...props.htmlProps,

@@ -13,6 +13,7 @@ export function FormMoneyInput<T>(
       onBlur={(numericValue: number) => {
         props.saveValueToState(props.propertyPath, numericValue)
         if (props.validateOnBlur) props.validate(numericValue)
+        if (props.onBlur) props.onBlur(numericValue)
       }}
       onChange={(numericValue: number) => {
         if (props.validateOnChange) props.validate(numericValue)

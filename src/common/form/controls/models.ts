@@ -18,6 +18,7 @@ export interface BaseFormControlProps<T> {
   isReadOnly: boolean
   label: string | undefined
   hasError: boolean
+  onBlur?: (fieldValue: any) => void
   validate: (value: any) => void
   validateOnBlur: boolean
   validateOnChange: boolean

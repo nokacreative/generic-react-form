@@ -41,6 +41,7 @@ interface BaseControlConfig<T> {
   alignRight?: boolean
   /** Return an error message if there is an error, or undefined | null otherwise */
   validator?: (fieldValue: any, formData: T) => string | { [propertyPath: string]: string | undefined | null } | undefined | null
+  onBlur?: (fieldValue: any) => void
   onInfoIconClicked?: () => void
   /** Whether or not the label should be inline with the control */
   isInline?: boolean
