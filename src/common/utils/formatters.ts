@@ -1,4 +1,4 @@
-export function stripNonMoneyValues(value: string) {
+export function stripNonFloatValues(value: string) {
   const match = value.match(/\d+\.?\d*/g)
   if (match) {
     return match.join('')
@@ -19,7 +19,7 @@ export function formatMoney(
   removeSymbol = true
 ) {
   const numericValue =
-    typeof value === 'number' ? value : parseFloat(stripNonMoneyValues(value))
+    typeof value === 'number' ? value : parseFloat(stripNonFloatValues(value))
   const formatted = moneyFormatter(currencyCode).format(numericValue)
   return removeSymbol ? formatted.slice(1) : formatted
 }

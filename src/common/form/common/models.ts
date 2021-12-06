@@ -60,7 +60,7 @@ export interface BaseInputControlConfig {
   >
 }
 export interface StandardInputControlConfig extends BaseInputControlConfig {
-  inputType?: Exclude<InputType, InputType.NUMBER | InputType.MONEY | InputType.PHONE>
+  inputType?: Exclude<InputType, InputType.INTEGER | InputType.FLOAT | InputType.MONEY | InputType.PHONE>
 }
 
 export interface PhoneInputcontrolConfig extends BaseInputControlConfig {
@@ -68,12 +68,16 @@ export interface PhoneInputcontrolConfig extends BaseInputControlConfig {
   requireCountryCode?: boolean
 }
 
-export interface NumericInputControlConfig extends BaseInputControlConfig {
-  inputType: InputType.NUMBER
+export interface IntegerInputControlConfig extends BaseInputControlConfig {
+  inputType: InputType.INTEGER
   minValue?: number
   maxValue?: number
 }
-
+export interface FloatInputControlConfig extends BaseInputControlConfig {
+  inputType: InputType.FLOAT
+  minValue?: number
+  maxValue?: number
+}
 export interface MoneyInputControlConfig extends BaseInputControlConfig {
   inputType: InputType.MONEY
   minValue?: number
@@ -89,7 +93,8 @@ export type DateInputControlConfig = BaseInputControlConfig &
 export type InputControlConfig =
   | StandardInputControlConfig
   | PhoneInputcontrolConfig
-  | NumericInputControlConfig
+  | IntegerInputControlConfig
+  | FloatInputControlConfig
   | MoneyInputControlConfig
   | DateInputControlConfig
 

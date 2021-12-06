@@ -135,7 +135,17 @@ function validateControl<T>(
           return
         }
       }
-      if (controlConfig.inputType === InputType.NUMBER) {
+      if (controlConfig.inputType === InputType.INTEGER) {
+        if (controlConfig.minValue && value < controlConfig.minValue) {
+          setControlError(propertyPath, ErrorType.MIN_VALUE)
+          return
+        }
+        if (controlConfig.maxValue && value > controlConfig.maxValue) {
+          setControlError(propertyPath, ErrorType.MAX_VALUE)
+          return
+        }
+      }
+      if (controlConfig.inputType === InputType.FLOAT) {
         if (controlConfig.minValue && value < controlConfig.minValue) {
           setControlError(propertyPath, ErrorType.MIN_VALUE)
           return

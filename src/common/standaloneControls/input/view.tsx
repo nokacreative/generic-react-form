@@ -38,7 +38,11 @@ export function Input({ type, ...props }: Props) {
   const { className: extraClassName, ...htmlProps } = props.htmlProps || {}
 
   function onBlur(value: any) {
-    const properValue = type === InputType.NUMBER ? parseFloat(value) : value
+    const properValue = type === InputType.FLOAT ? 
+      parseFloat(value) : 
+      type === InputType.INTEGER ? 
+        parseInt(value) : 
+        value
     if (props.onBlur) props.onBlur(properValue)
   }
 

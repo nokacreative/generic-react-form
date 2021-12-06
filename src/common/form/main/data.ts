@@ -2,7 +2,7 @@ import {
   CheckboxGroupControlConfig,
   FormControlConfig,
   InputControlConfig,
-  NumericInputControlConfig,
+  IntegerInputControlConfig,
 } from '../common/models'
 import { ErrorType } from './enums'
 import { ErrorMessages } from './models'
@@ -25,10 +25,10 @@ export const DEFAULT_ERROR_MESSAGES = <T>(
     (controlConfig as InputControlConfig).maxLength
   } characters.`,
   [ErrorType.MIN_VALUE]: `Must be greater than ${
-    (controlConfig as NumericInputControlConfig).minValue
+    (controlConfig as IntegerInputControlConfig).minValue
   }.`,
   [ErrorType.MAX_VALUE]: `Must be less than ${
-    (controlConfig as NumericInputControlConfig).maxValue
+    (controlConfig as IntegerInputControlConfig).maxValue
   }.`,
   [ErrorType.EMAIL]: 'Please enter a valid email.',
   [ErrorType.PHONE]: 'Please enter a valid phone number.',

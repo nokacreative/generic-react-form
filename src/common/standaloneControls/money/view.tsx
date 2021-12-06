@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './styles.scss'
 
-import { formatMoney, stripNonMoneyValues } from '../../utils/formatters'
+import { formatMoney, stripNonFloatValues } from '../../utils/formatters'
 import { NOKA_COLORS_CLASS } from '../../../assets/constants'
 
 type HtmlInputProps = React.DetailedHTMLProps<
@@ -28,7 +28,7 @@ export function MoneyInput(props: Props) {
       setDisplayValue(formatMoney(props.defaultValue, props.currencyCode))
       setNumericValue(
         typeof props.defaultValue === 'string'
-          ? parseFloat(stripNonMoneyValues(props.defaultValue))
+          ? parseFloat(stripNonFloatValues(props.defaultValue))
           : props.defaultValue
       )
     } else {
@@ -69,7 +69,7 @@ export function MoneyInput(props: Props) {
         {...(props.displayInputProps || {})}
         value={displayValue}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const value = stripNonMoneyValues(e.target.value)
+          const value = stripNonFloatValues(e.target.value)
           setDisplayValue(value)
           if (props.onChange) props.onChange(parseFloat(value))
         }}

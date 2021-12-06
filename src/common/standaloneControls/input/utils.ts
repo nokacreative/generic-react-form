@@ -1,4 +1,4 @@
-import { stripNonNumericValues } from '../../utils/formatters'
+import { stripNonFloatValues, stripNonNumericValues } from '../../utils/formatters'
 import { InputType } from './enums'
 
 export type InputValueFormatter = (value: string) => any
@@ -18,8 +18,10 @@ export function formatPhoneNumber(value: string) {
 export function getFormatter(type: InputType): InputValueFormatter | undefined {
   if (type === InputType.PHONE) {
     return formatPhoneNumber
-  } else if (type === InputType.NUMBER) {
+  } else if (type === InputType.INTEGER) {
     return (value: string) => stripNonNumericValues(value)
+  } else if (type === InputType.FLOAT) {
+    return (value: string) => stripNonFloatValues(value)
   }
   return undefined
 }
