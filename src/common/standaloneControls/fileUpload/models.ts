@@ -14,6 +14,7 @@ export type Props = {
   supportedFileExtensions?: string[]
   onUpload?: (files: File[]) => void
   onRemove?: (filename: string, index: number) => void
+  onFilesChange?: (files: File[] | undefined) => void
   fileUploadProgress?: { [filename: string]: number }
   fileStatuses?: { [filename: string]: FileUploadStatus }
   isMultiple?: boolean

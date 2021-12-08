@@ -50,6 +50,10 @@ export function FileUploader(props: Props) {
     props.messageOverrides?.fileSizeError,
   ])
 
+  useEffect(() => {
+    if(props.onFilesChange) props.onFilesChange(files)
+  }, [files])
+
   const fileBrowserButton = useRef<HTMLInputElement>(null)
   const dropzone = useRef<HTMLElement>(null)
 
